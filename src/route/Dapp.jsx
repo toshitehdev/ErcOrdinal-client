@@ -15,6 +15,7 @@ function Dapp() {
     address,
     addAddress,
     addCollectionAmount,
+    itemData,
     addItemData,
   } = useContext(AppContext);
   useEffect(() => {

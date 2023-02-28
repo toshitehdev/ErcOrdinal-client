@@ -51,3 +51,6 @@
   background-color: #14161c;
   overflow: hidden;
 }
+.bg-custom-transparent {
+  background-color: rgb(213 64 64 / 89%);
+}

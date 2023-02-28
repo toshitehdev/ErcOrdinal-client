@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
-import { transferSingle, transfer, transferMany } from "../module";
+import { transferSingle, transfer, transferMany, stateUpdate } from "../module";
 import AppContext from "../Context";
 
 import ethPanda from "../assets/eth-panda.png";
@@ -24,6 +25,7 @@ function Collections() {
     collectionAmount,
     addressTransferSingle,
     addAddressToTransfer,
+    addCollectionAmount,
     itemData,
     addItemData,
   } = useContext(AppContext);
@@ -145,10 +147,21 @@ function Collections() {
     return arr;
   };
 
+  const cancelSingleSelected = (id) => {
+    const filteredItemData = selectedItemData.filter((item) => item.id !== id);
+    setSelectedItemData(filteredItemData);
+  };
+
   const selectedOrdinals = () => {
     return selectedItemData.map((item) => {
       return (
-        <div className="w-16 mr-2" key={item.id}>
+        <div className="w-16 mr-2 relative" key={item.id}>
+          <div
+            onClick={() => cancelSingleSelected(item.id)}
+            className="absolute hover:bg-red-600 top-0 border border-white right-0 w-7 h-7 bg-custom-transparent rounded-full flex items-center justify-center text-white font-bold text-base cursor-pointer"
+          >
+            X
+          </div>
           <img src={item.img} alt="" />
           <p className="text-white">#{item.id}</p>
         </div>
@@ -160,8 +173,13 @@ function Collections() {
     if (!addressTransfer || !transferAmount) {
       return;
     }
-    transfer(addressTransfer, transferAmount);
+    transfer(addressTransfer, transferAmount).then(() => {
+      stateUpdate(addCollectionAmount, addItemData).then(() => {
+        toast.success("Ordinals Successfully Transfered!");
+      });
+    });
   };
+
   const handleTransferMany = () => {
     if (selectedItemData.length < 1) {
       return;
@@ -171,7 +189,12 @@ function Collections() {
     }
     const idToSend = selectedItemData.map((item) => item.id);
     // console.log(idToSend);
-    transferMany(addressTransferMany, idToSend);
+    transferMany(addressTransferMany, idToSend).then(() => {
+      stateUpdate(addCollectionAmount, addItemData).then(() => {
+        setSelectedItemData([]);
+        toast.success("Ordinals Successfully Transfered!");
+      });
+    });
   };
 
   return (
@@ -240,7 +263,10 @@ function Collections() {
               <p className="mb-5 text-sm text-gray-200">
                 Keep in mind, the more you transfer the more gas you'll pay
               </p>
-              <button className="text-white text-xs font-bold bg-red-500 px-5 py-2 rounded-full mb-3">
+              <button
+                onClick={() => setSelectedItemData([])}
+                className="text-white text-xs font-bold bg-red-500 hover:bg-red-600 px-5 py-2 rounded-full mb-3"
+              >
                 Cancel All
               </button>
               <div className="flex border border-gray-700 p-8 rounded-3xl mb-10">

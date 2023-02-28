@@ -15,7 +15,7 @@ async function fetchIPFS(tokenHoldings) {
     );
     itemData.push({ id: ethers.toNumber(tokenHoldings[i]) });
   }
-  Promise.all(
+  return Promise.all(
     promises.map((res) => {
       return fetch(res)
         .then((response) => {
@@ -23,18 +23,21 @@ async function fetchIPFS(tokenHoldings) {
         })
         .then((data) => data);
     })
-  ).then((value) => {
-    value.map((item, index) => {
-      const str = item.image.slice(7);
-      const img = `https://ipfs.io/ipfs/${str}`;
-      itemData[index].img = img;
+  )
+    .then((value) => {
+      value.map((item, index) => {
+        const str = item.image.slice(7);
+        const img = `https://ipfs.io/ipfs/${str}`;
+        itemData[index].img = img;
+      });
+    })
+    .then(() => {
+      // function compareNumbers(a, b) {
+      //   return a.id - b.id;
+      // }
+      // itemData.sort(compareNumbers);
+      return itemData;
     });
-  });
-  // function compareNumbers(a, b) {
-  //   return a.id - b.id;
-  // }
-  // itemData.sort(compareNumbers);
-  return itemData;
 }
 
 export const initialStateUpdate = async (
@@ -71,36 +74,6 @@ export const stateUpdate = async (addCollectionAmount, addItemData) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export const transferSingle = async (recipient, id) => {
-  // console.log(recipient, id);
-  const signer = await provider.getSigner();
-  const contractSigned = new ethers.Contract(
-    contractAddress,
-    contractABI,
-    signer
-  );
-  const tx = await contractSigned.transferSingle(recipient, id);
-
-  const response = await provider.getTransactionReceipt(tx.hash);
-  await response.confirmations();
-  //do state update
-  return response;
-};
-
-export const transfer = async (recipient, amount) => {
-  const signer = await provider.getSigner();
-  const contractSigned = new ethers.Contract(
-    contractAddress,
-    contractABI,
-    signer
-  );
-  const tx = await contractSigned.transfer(recipient, amount);
-  const response = await provider.getTransactionReceipt(tx.hash);
-  await response.confirmations();
-  //do state update
-  return response;
 };
 
 export const mint = async () => {
@@ -141,6 +114,20 @@ export const mintMany = async (amount) => {
   return mintedIds;
 };
 
+export const transfer = async (recipient, amount) => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.transfer(recipient, amount);
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
+
 export const transferMany = async (recipient, ids) => {
   const signer = await provider.getSigner();
   const contractSigned = new ethers.Contract(
@@ -150,6 +137,22 @@ export const transferMany = async (recipient, ids) => {
   );
 
   const tx = await contractSigned.transferMany(recipient, ids);
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
+
+export const transferSingle = async (recipient, id) => {
+  // console.log(recipient, id);
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.transferSingle(recipient, id);
+
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
   //do state update

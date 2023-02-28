@@ -8,7 +8,7 @@ import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
   const { addCollectionAmount, addItemData } = useContext(AppContext);
-  const [mintAmount, setMintAmount] = useState(null);
+  const [mintAmount, setMintAmount] = useState("");
   const handleMintSingle = () => {
     mint().then((id) => {
       stateUpdate(addCollectionAmount, addItemData);
@@ -27,6 +27,7 @@ function Mint() {
     }
     mintMany(mintAmount).then((ids) => {
       stateUpdate(addCollectionAmount, addItemData);
+      setMintAmount("");
       toast.success(`Succesfully Minted #${ids}`);
     });
   };
@@ -56,6 +57,7 @@ function Mint() {
               placeholder="Amount"
               className="block mt-10 px-5 py-2 mb-3 w-1/2 rounded-xl text-xs text-black"
               onChange={(e) => setMintAmount(e.target.value)}
+              value={mintAmount}
             />
             <button className={style.btnUniversal} onClick={handleMintMany}>
               Mint Multiple ErcOrdinals
