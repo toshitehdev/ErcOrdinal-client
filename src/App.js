@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./Context";
+import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./route/Home";
 import Dapp from "./route/Dapp";

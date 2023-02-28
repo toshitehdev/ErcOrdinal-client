@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { toast } from "react-toastify";
 import { style } from "./style";
-import { mint, mintMany } from "../module";
+import { mint, mintMany, stateUpdate } from "../module";
+import AppContext from "../Context";
+
 import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
+  const { addCollectionAmount, addItemData } = useContext(AppContext);
   const [mintAmount, setMintAmount] = useState(null);
   const handleMintSingle = () => {
-    mint();
+    mint().then((id) => {
+      stateUpdate(addCollectionAmount, addItemData);
+      toast.success(`Succesfully Minted #${id}`);
+    });
   };
   const handleMintMany = () => {
     if (!mintAmount) {
@@ -18,7 +25,10 @@ function Mint() {
     if (mintAmount < 1) {
       return;
     }
-    mintMany(mintAmount);
+    mintMany(mintAmount).then((ids) => {
+      stateUpdate(addCollectionAmount, addItemData);
+      toast.success(`Succesfully Minted #${ids}`);
+    });
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white">

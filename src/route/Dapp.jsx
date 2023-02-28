@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import { initialStateUpdate } from "../module";
 import { trimString } from "./helper";
@@ -8,6 +9,14 @@ import ethImage from "../assets/eth.png";
 import { style } from "./style";
 
 function Dapp() {
+  const {
+    isConnected,
+    addConnection,
+    address,
+    addAddress,
+    addCollectionAmount,
+    addItemData,
+  } = useContext(AppContext);
   useEffect(() => {
     const checkAccount = async () => {
       const accounts = await window.ethereum.request({
@@ -20,24 +29,13 @@ function Dapp() {
           addConnection,
           addAddress,
           addCollectionAmount,
-          addTokenIds,
-          addDataImg,
           addItemData
         );
       }
     };
     checkAccount();
   }, []);
-  const {
-    isConnected,
-    addConnection,
-    address,
-    addAddress,
-    addCollectionAmount,
-    addTokenIds,
-    addDataImg,
-    addItemData,
-  } = useContext(AppContext);
+
   const connect = async () => {
     if (typeof window.ethereum !== "undefined") {
       const accounts = await window.ethereum.request({
@@ -49,8 +47,6 @@ function Dapp() {
         addConnection,
         addAddress,
         addCollectionAmount,
-        addTokenIds,
-        addDataImg,
         addItemData
       );
     } else {
@@ -91,6 +87,18 @@ function Dapp() {
         </div>
       </div>
       <div className="pl-80 bg-custom-blacker">
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <Outlet />
       </div>
       {/* Navigation========================================================== */}

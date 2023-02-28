@@ -4,33 +4,9 @@ import { contractAddress, contractABI } from "./constant";
 const provider = new ethers.BrowserProvider(window.ethereum);
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-export const initialStateUpdate = async (
-  account,
-  addConnection,
-  addAddress,
-  addCollectionAmount,
-  addTokenIds,
-  setDataImg,
-  addItemData
-) => {
-  const tokenHoldings = await contract.getAddressToIds(account);
-
-  const arr = [];
-  tokenHoldings.map((item) => {
-    arr.push(ethers.toNumber(item));
-  });
-
-  addConnection(true);
-  addAddress(account);
-  addCollectionAmount(arr.length);
-  function compareNumbers(a, b) {
-    return a.id - b.id;
-  }
-  // console.log(arr);
-
-  addTokenIds(arr);
-  const itemData = [];
+async function fetchIPFS(tokenHoldings) {
   let promises = [];
+  const itemData = [];
   for (let i = 0; i < tokenHoldings.length; i++) {
     promises.push(
       `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${ethers.toNumber(
@@ -39,7 +15,6 @@ export const initialStateUpdate = async (
     );
     itemData.push({ id: ethers.toNumber(tokenHoldings[i]) });
   }
-
   Promise.all(
     promises.map((res) => {
       return fetch(res)
@@ -49,50 +24,53 @@ export const initialStateUpdate = async (
         .then((data) => data);
     })
   ).then((value) => {
-    const arrNew = [];
     value.map((item, index) => {
-      //when uploading to IPFS, make sure to include id
-      //so you can read the value and update itemData accordingly
-      //or use name but give it stringify number, like so, name: "1"
       const str = item.image.slice(7);
       const img = `https://ipfs.io/ipfs/${str}`;
-      // console.log(img);
-      //index will be changed by item.id or Number(item.name)
-      //find the coresponding id
-
-      // itemData.forEach((obj, idx) => {
-      //   if (obj.id === index) {
-      //     itemData[idx].img = img;
-      //   }
-      // });
-      // itemData[`${index}`] = img;
-      //for now just add as is
       itemData[index].img = img;
-      arrNew.push(img);
     });
-    // itemData.sort(compareNumbers);
-    addItemData(itemData);
-    setDataImg(arrNew);
   });
+  // function compareNumbers(a, b) {
+  //   return a.id - b.id;
+  // }
+  // itemData.sort(compareNumbers);
+  return itemData;
+}
 
-  return true;
+export const initialStateUpdate = async (
+  account,
+  addConnection,
+  addAddress,
+  addCollectionAmount,
+  addItemData
+) => {
+  try {
+    const tokenHoldings = await contract.getAddressToIds(account);
+    const itemData = await fetchIPFS(tokenHoldings);
+    addConnection(true);
+    addAddress(account);
+    addCollectionAmount(tokenHoldings.length);
+    addItemData(itemData);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const stateUpdate = async (
-  account,
-  addCollectionAmount,
-  addTokenIds
-) => {
-  const tokenHoldings = await contract.getAddressToIds(account);
-  const arr = [];
-  tokenHoldings.map((item) => {
-    arr.push(ethers.toNumber(item));
-  });
-  addCollectionAmount(tokenHoldings.length);
-  addTokenIds(arr);
-  return {
-    tokenIds: arr,
-  };
+export const stateUpdate = async (addCollectionAmount, addItemData) => {
+  try {
+    const accounts = await window.ethereum.request({
+      method: "eth_accounts",
+    });
+    const account = accounts[0];
+    if (accounts.length > 0) {
+      const tokenHoldings = await contract.getAddressToIds(account);
+      const itemData = await fetchIPFS(tokenHoldings);
+      addCollectionAmount(tokenHoldings.length);
+      addItemData(itemData);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const transferSingle = async (recipient, id) => {
@@ -135,8 +113,10 @@ export const mint = async () => {
   const tx = await contractSigned.mint({ value: ethers.parseEther("0.02") });
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
-  //do state update
-  return response;
+  const logs = contract.interface.parseLog(response.logs[0]);
+  //this is -1 because token_counter start from 1, tokenId start from 0
+  const mintedId = ethers.toNumber(logs.args["1"]) - 1;
+  return mintedId;
 };
 
 export const mintMany = async (amount) => {
@@ -146,15 +126,19 @@ export const mintMany = async (amount) => {
     contractABI,
     signer
   );
-
   const pricePaid = amount * 0.02;
   const tx = await contractSigned.mintMany(amount, {
     value: ethers.parseEther(`${pricePaid}`),
   });
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
-  //do state update
-  return response;
+  const mintedIds = [];
+  for (let i = 0; i < response.logs.length; i++) {
+    let logs = contract.interface.parseLog(response.logs[i]);
+    let mintedId = ethers.toNumber(logs.args["1"]) - 1;
+    mintedIds.push(mintedId);
+  }
+  return mintedIds;
 };
 
 export const transferMany = async (recipient, ids) => {

@@ -17,35 +17,21 @@ function Collections() {
   //prolly delete later
   const [addressTransfer, setAddressTransfer] = useState("");
   const [transferAmount, setTransferAmount] = useState(null);
+  const [activeInput, setActiveInput] = useState(null);
+  const step = 12;
   const {
     isConnected,
-    addConnection,
-    address,
-    addAddress,
     collectionAmount,
-    addCollectionAmount,
-    tokenIds,
-    addTokenIds,
     addressTransferSingle,
     addAddressToTransfer,
-    dataImg,
-    addDataImg,
     itemData,
     addItemData,
   } = useContext(AppContext);
 
-  const [activeInput, setActiveInput] = useState(null);
-  const step = 12;
-
-  const handleTransferSingle = async (id, image) => {
+  const handleTransferSingle = async (id) => {
     try {
       await transferSingle(addressTransferSingle, id);
-      //filter tokenIds and dataImg
-      const filteredTokenId = tokenIds.filter((item) => item != id);
-      const filteredDataImg = dataImg.filter((item) => item != image);
       const filteredItemData = itemData.filter((item) => item.id !== id);
-      addTokenIds(filteredTokenId);
-      addDataImg(filteredDataImg);
       addItemData(filteredItemData);
       addAddressToTransfer("");
     } catch (err) {
@@ -131,8 +117,6 @@ function Collections() {
           </div>
         );
       }
-
-      // }
     }
     return arr;
   };
@@ -142,13 +126,12 @@ function Collections() {
   };
 
   const paginationButton = () => {
-    const buttonCount = Math.ceil(tokenIds.length / step);
-
+    const buttonCount = Math.ceil(itemData.length / step);
     let arr = [];
     for (let i = 0; i < buttonCount; i++) {
       arr.push(
         <button
-          key={tokenIds[i]}
+          key={itemData[i].id}
           onClick={() => {
             loadMore(i + 1);
             setActiveButton(i + 1);

@@ -147,37 +147,11 @@ export const contractABI = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_maxSupply",
-        type: "uint256",
-      },
-    ],
-    name: "changeMaxSupply",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
         name: "_amount",
         type: "uint256",
       },
     ],
     name: "changeMaxTransfer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_price",
-        type: "uint256",
-      },
-    ],
-    name: "changeMintPrice",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -209,6 +183,19 @@ export const contractABI = [
         internalType: "uint256[]",
         name: "",
         type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getGenesisSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -259,19 +246,6 @@ export const contractABI = [
         internalType: "address",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "get_ids_length",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -374,14 +348,8 @@ export const contractABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "token_ids",
+    inputs: [],
+    name: "token_counter",
     outputs: [
       {
         internalType: "uint256",
