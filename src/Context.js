@@ -8,6 +8,8 @@ export function AppProvider({ children }) {
   const [collectionAmount, setCollectionAmount] = useState(0);
   const [tokenIds, setTokenIds] = useState([]);
   const [addressTransferSingle, setAddressTransferSingle] = useState("");
+  const [dataImg, setDataImg] = useState([]);
+  const [itemData, setItemData] = useState([]);
 
   const addConnection = (param) => {
     setIsConnected(param);
@@ -24,6 +26,12 @@ export function AppProvider({ children }) {
   const addAddressToTransfer = (param) => {
     setAddressTransferSingle(param);
   };
+  const addDataImg = (param) => {
+    setDataImg(param);
+  };
+  const addItemData = (param) => {
+    setItemData(param);
+  };
 
   const param = {
     isConnected,
@@ -36,6 +44,10 @@ export function AppProvider({ children }) {
     addCollectionAmount,
     addTokenIds,
     addAddressToTransfer,
+    dataImg,
+    addDataImg,
+    itemData,
+    addItemData,
   };
 
   return <AppContext.Provider value={param}>{children}</AppContext.Provider>;

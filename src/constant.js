@@ -1,5 +1,5 @@
 // export const contractAddress = "0x053D452eCb7eF90E5fE0B4f96B7D37fDFfef2CF7";
-export const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+export const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 
 export const contractABI = [
   {
@@ -246,6 +246,25 @@ export const contractABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
+    name: "getIdToTokens",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "get_ids_length",
     outputs: [
@@ -298,6 +317,19 @@ export const contractABI = [
   {
     inputs: [],
     name: "mint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "mintMany",
     outputs: [],
     stateMutability: "payable",
     type: "function",
@@ -423,6 +455,24 @@ export const contractABI = [
         type: "bool",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_ids",
+        type: "uint256[]",
+      },
+    ],
+    name: "transferMany",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

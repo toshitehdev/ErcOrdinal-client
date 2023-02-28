@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-custom-blacker {
+  background-color: #0d0e12;
+}
+
+.bg-custom-black {
+  background-color: #14161c;
+}
+.bg-light-black {
+  background-color: #1c2025;
+}
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+.max-1200 {
+  max-width: 1200px;
+}
+.bg-hover {
+  background-color: #1c1f25;
+}
+.linear {
+  background: rgb(11, 146, 193);
+  background: linear-gradient(
+    245deg,
+    rgba(11, 146, 193, 0.9836528361344538) 48%,
+    rgba(112, 9, 180, 1) 100%
+  );
+}
+
+.pinky-linear {
+  background: rgb(118, 11, 193);
+  background: linear-gradient(
+    245deg,
+    rgba(118, 11, 193, 0.9836528361344538) 48%,
+    rgba(180, 9, 124, 1) 100%
+  );
+}
+
+.active {
+  color: #f472b6;
+  background-color: #1c2025;
+}
+
+.vh-height {
+  height: 67vh;
+  background-color: #14161c;
+  overflow: hidden;
+}

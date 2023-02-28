@@ -10,23 +10,36 @@ export const initialStateUpdate = async (
   addAddress,
   addCollectionAmount,
   addTokenIds,
-  setDataImg
+  setDataImg,
+  addItemData
 ) => {
   const tokenHoldings = await contract.getAddressToIds(account);
+
   const arr = [];
   tokenHoldings.map((item) => {
     arr.push(ethers.toNumber(item));
   });
+
   addConnection(true);
   addAddress(account);
   addCollectionAmount(arr.length);
-  addTokenIds(arr);
-  let promises = [];
-  for (let i = 0; i < arr.length; i++) {
-    promises.push(
-      `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${arr[i]}`
-    );
+  function compareNumbers(a, b) {
+    return a.id - b.id;
   }
+  // console.log(arr);
+
+  addTokenIds(arr);
+  const itemData = [];
+  let promises = [];
+  for (let i = 0; i < tokenHoldings.length; i++) {
+    promises.push(
+      `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${ethers.toNumber(
+        tokenHoldings[i]
+      )}`
+    );
+    itemData.push({ id: ethers.toNumber(tokenHoldings[i]) });
+  }
+
   Promise.all(
     promises.map((res) => {
       return fetch(res)
@@ -37,34 +50,53 @@ export const initialStateUpdate = async (
     })
   ).then((value) => {
     const arrNew = [];
-    value.map((item) => {
+    value.map((item, index) => {
+      //when uploading to IPFS, make sure to include id
+      //so you can read the value and update itemData accordingly
+      //or use name but give it stringify number, like so, name: "1"
       const str = item.image.slice(7);
       const img = `https://ipfs.io/ipfs/${str}`;
+      // console.log(img);
+      //index will be changed by item.id or Number(item.name)
+      //find the coresponding id
+
+      // itemData.forEach((obj, idx) => {
+      //   if (obj.id === index) {
+      //     itemData[idx].img = img;
+      //   }
+      // });
+      // itemData[`${index}`] = img;
+      //for now just add as is
+      itemData[index].img = img;
       arrNew.push(img);
     });
-    // console.log(arr);
+    // itemData.sort(compareNumbers);
+    addItemData(itemData);
     setDataImg(arrNew);
   });
 
-  return {
-    tokenIds: arr,
-  };
+  return true;
 };
 
-export const stateUpdate = async (account) => {
+export const stateUpdate = async (
+  account,
+  addCollectionAmount,
+  addTokenIds
+) => {
   const tokenHoldings = await contract.getAddressToIds(account);
-
   const arr = [];
   tokenHoldings.map((item) => {
     arr.push(ethers.toNumber(item));
   });
+  addCollectionAmount(tokenHoldings.length);
+  addTokenIds(arr);
   return {
     tokenIds: arr,
   };
 };
 
 export const transferSingle = async (recipient, id) => {
-  console.log(recipient, id);
+  // console.log(recipient, id);
   const signer = await provider.getSigner();
   const contractSigned = new ethers.Contract(
     contractAddress,
@@ -76,33 +108,66 @@ export const transferSingle = async (recipient, id) => {
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
   //do state update
-  console.log("success");
+  return response;
 };
 
-// //7,8,98,57, 33,44,78
-// (1,2,3,4,5,6,7)
-// //length = 7
-// //loop 2x start i = 1
-// //uint256 idx = senderHoldingsLength - i;
-// //uint256 token_id = addressToTokenIds[_sender][idx];
-// // ==========================
-// //i=1
-// //idToIndex[recipient][adressToId[rec][i-1]].index = recipientlength + i
-// ("7"=8, "8"=2, "98"=3, "57"=4, "33"=5, "44"=6, "78"=7)
-// //addresToId[recipient].push(addresToId[recipient][i-1]) => 7,8,98,57,33,44,78,7
-// //idToIndex[recipient][addressToId[sender][token_id]].index = i
-// ("7"=8, "8"=2, "98"=3, "57"=4, "33"=5, "44"=6, "78"=7, "5"=1)
-// //addresToId[recipient][i-1] = addressToId[sender][senderlength-1] => 5,8,98,57,33,44,78,7
+export const transfer = async (recipient, amount) => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.transfer(recipient, amount);
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
 
-// //i=2
-// //idToIndex[recipient][adressToId[rec][i-1]].index = recipientlength + i
-// ("7"=8, "8"=9, "98"=3, "57"=4, "33"=5, "44"=6, "78"=7, "5"=1)
-// //addresToId[recipient].push(addresToId[recipient][i-1]) => 5,8,98,57,33,44,78,7,8
-// //idToIndex[recipient][addressToId[sender][token_id]].index = i
-// ("7"=8, "8"=9, "98"=3, "57"=4, "33"=5, "44"=6, "78"=7, "5"=1, "4"=2)
-// //addresToId[recipient][i-1] = 4 => 5,4,98,57,33,44,78,7,8
+export const mint = async () => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.mint({ value: ethers.parseEther("0.02") });
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
 
-// //5,4,98,57,7,8
+export const mintMany = async (amount) => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
 
-// //send 4,5
-// //1,2,3,4,5
+  const pricePaid = amount * 0.02;
+  const tx = await contractSigned.mintMany(amount, {
+    value: ethers.parseEther(`${pricePaid}`),
+  });
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
+
+export const transferMany = async (recipient, ids) => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+
+  const tx = await contractSigned.transferMany(recipient, ids);
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};
