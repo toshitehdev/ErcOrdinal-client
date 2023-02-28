@@ -6,6 +6,7 @@ import Home from "./route/Home";
 import Dapp from "./route/Dapp";
 import Collections from "./route/Collections";
 import Mint from "./route/Mint";
+import Ordinal from "./route/Ordinal";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/dapp" element={<Dapp />}>
             <Route path="/dapp/collections" element={<Collections />} />
             <Route path="/dapp/mint" element={<Mint />} />
+            <Route path="/dapp/ordinal/" element={<Ordinal />} />
           </Route>
         </Routes>
       </AppProvider>

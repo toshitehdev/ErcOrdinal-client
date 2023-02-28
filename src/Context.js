@@ -10,6 +10,7 @@ export function AppProvider({ children }) {
   const [addressTransferSingle, setAddressTransferSingle] = useState("");
   const [dataImg, setDataImg] = useState([]);
   const [itemData, setItemData] = useState([]);
+  const [ordinalIdView, setOrdinalIdView] = useState(0);
 
   const addConnection = (param) => {
     setIsConnected(param);
@@ -32,6 +33,9 @@ export function AppProvider({ children }) {
   const addItemData = (param) => {
     setItemData(param);
   };
+  const addOrdinalIdView = (param) => {
+    setOrdinalIdView(param);
+  };
 
   const param = {
     isConnected,
@@ -48,6 +52,8 @@ export function AppProvider({ children }) {
     addDataImg,
     itemData,
     addItemData,
+    ordinalIdView,
+    addOrdinalIdView,
   };
 
   return <AppContext.Provider value={param}>{children}</AppContext.Provider>;

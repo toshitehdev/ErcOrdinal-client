@@ -26,6 +26,7 @@ async function fetchIPFS(tokenHoldings) {
   )
     .then((value) => {
       value.map((item, index) => {
+        // console.log(item.attributes);
         const str = item.image.slice(7);
         const img = `https://ipfs.io/ipfs/${str}`;
         itemData[index].img = img;
@@ -135,7 +136,6 @@ export const transferMany = async (recipient, ids) => {
     contractABI,
     signer
   );
-
   const tx = await contractSigned.transferMany(recipient, ids);
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
@@ -157,4 +157,20 @@ export const transferSingle = async (recipient, id) => {
   await response.confirmations();
   //do state update
   return response;
+};
+
+export const getTokenData = async (id) => {
+  //read from the chain first
+  //return nothing, dont do nothing
+  const fetchData = await fetch(
+    `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${id}`
+  );
+  const jsonice = await fetchData.json();
+  const str = jsonice.image.slice(7);
+  const img = `https://ipfs.io/ipfs/${str}`;
+  // console.log(jsonice.attributes);
+  return {
+    attributes: jsonice.attributes,
+    img,
+  };
 };

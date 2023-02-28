@@ -28,15 +28,21 @@ function Collections() {
     addCollectionAmount,
     itemData,
     addItemData,
+    addOrdinalIdView,
   } = useContext(AppContext);
 
   const handleTransferSingle = async (id) => {
+    if (!addressTransferSingle) {
+      return;
+    }
     try {
       await transferSingle(addressTransferSingle, id);
       const filteredItemData = itemData.filter((item) => item.id !== id);
       addItemData(filteredItemData);
       addAddressToTransfer("");
+      toast.success("Ordinal Transferred Successfully!");
     } catch (err) {
+      toast.error("Oops, looks like there's an error");
       console.log(err);
     }
   };
@@ -62,7 +68,7 @@ function Collections() {
             className="invisible border border-gray-700 rounded-2xl overflow-hidden relative"
           >
             <input type="checkbox" className="absolute top-3 right-3" />
-            <Link to="" className="block p-2">
+            <Link to="/" className="block p-2">
               <img src={placeholder} />
               <p className="font-bold mb-3 mt-3 text-white">#000</p>
             </Link>
@@ -90,7 +96,11 @@ function Collections() {
               className="absolute top-3 right-3"
               checked={selectedItemData.includes(itemData[i])}
             />
-            <Link to="" className="block p-2">
+            <Link
+              onClick={() => addOrdinalIdView(itemData[i].id)}
+              to="/dapp/ordinal"
+              className="block p-2"
+            >
               <img src={itemData[i].img} alt="" />
               <p className="font-bold mb-3 mt-3 text-white">
                 #{itemData[i].id}
@@ -261,7 +271,7 @@ function Collections() {
                 Transfer
               </button>
               <p className="mb-5 text-sm text-gray-200">
-                Keep in mind, the more you transfer the more gas you'll pay
+                Keep in mind, the more you transfer the more gas you'll pay.
               </p>
               <button
                 onClick={() => setSelectedItemData([])}

@@ -73,6 +73,9 @@ function Dapp() {
           <NavLink to="/dapp/mint" className={style.link}>
             Mint
           </NavLink>
+          <NavLink to="/dapp/ordinal" className={style.link}>
+            View an Ordinal
+          </NavLink>
           <NavLink to="/dapp/bounties" className={style.link}>
             Bounties
           </NavLink>
