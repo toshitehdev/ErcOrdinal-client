@@ -174,3 +174,18 @@ export const getTokenData = async (id) => {
     img,
   };
 };
+
+export const withdrawMintSale = async () => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.withdrawMintSale();
+
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update
+  return response;
+};

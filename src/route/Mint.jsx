@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { style } from "./style";
-import { mint, mintMany, stateUpdate } from "../module";
+import { mint, mintMany, stateUpdate, withdrawMintSale } from "../module";
 import AppContext from "../Context";
 
 import ethmint from "../assets/eth-mint.png";
@@ -31,6 +31,10 @@ function Mint() {
       toast.success(`Succesfully Minted #${ids}`);
     });
   };
+  const handleWithdraw = () => {
+    withdrawMintSale();
+  };
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white">
       <div className="w-full max-1200">
@@ -42,10 +46,13 @@ function Mint() {
               <span className="font-bold text-pink-400 text-base">0.02</span>{" "}
               ETH
             </p>
-            <p className="text-sm">
+            <p className="text-sm mb-5">
               Keep in mind, for multiple minting, the more amount you mint the
               more gas you'll pay.
             </p>
+            <button onClick={handleWithdraw} className={style.btnUniversal}>
+              Withdraw Mint Sale (testonly)
+            </button>
           </div>
 
           <div>
