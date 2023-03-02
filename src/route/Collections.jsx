@@ -19,7 +19,7 @@ function Collections() {
   const [addressTransfer, setAddressTransfer] = useState("");
   const [transferAmount, setTransferAmount] = useState(null);
   const [activeInput, setActiveInput] = useState(null);
-  const step = 12;
+  const step = 14;
   const {
     isConnected,
     collectionAmount,
@@ -68,17 +68,19 @@ function Collections() {
             className="invisible border border-gray-700 rounded-2xl overflow-hidden relative"
           >
             <input type="checkbox" className="absolute top-3 right-3" />
-            <Link to="/" className="block p-2">
-              <img src={placeholder} />
-              <p className="font-bold mb-3 mt-3 text-white">#000</p>
+            <Link to="/dapp/ordinal" className="block px-5 pt-2">
+              <img className="" src={placeholder} alt="" />
+              <p className="font-bold mb-1 mt-3 text-white">#{}</p>
             </Link>
-            <div className="bg-light-black p-5">
+            <div className="px-2">
               <input
-                className="border border-gray-500 px-3 py-1 text-sm w-full mb-3"
+                className="border border-gray-500 px-3 py-2 text-xs w-full mb-3 rounded-lg"
                 type="text"
                 placeholder="Transfer to"
               />
-              <button className="mt-2 px-5 py-2 hover:bg-pink-500 bg-pink-600 text-white text-xs font-bold rounded-lg">
+            </div>
+            <div className="bg-light-black px-5 py-3">
+              <button className="w-full px-5 py-2 hover:bg-pink-500 bg-pink-600 text-white text-xs font-bold rounded-lg">
                 Transfer
               </button>
             </div>
@@ -93,22 +95,22 @@ function Collections() {
             <input
               onChange={(e) => handleSelection(e, itemData[i])}
               type="checkbox"
-              className="absolute top-3 right-3"
+              className="absolute top-4 right-6"
               checked={selectedItemData.includes(itemData[i])}
             />
             <Link
               onClick={() => addOrdinalIdView(itemData[i].id)}
               to="/dapp/ordinal"
-              className="block p-2"
+              className="block px-5 pt-3"
             >
-              <img src={itemData[i].img} alt="" />
-              <p className="font-bold mb-3 mt-3 text-white">
+              <img className="" src={itemData[i].img} alt="" />
+              <p className="font-bold mb-1 mt-3 text-white">
                 #{itemData[i].id}
               </p>
             </Link>
-            <div className="bg-light-black p-5">
+            <div className="px-2">
               <input
-                className="border border-gray-500 px-3 py-1 text-sm w-full mb-3"
+                className="border border-gray-500 px-3 py-2 text-xs w-full mb-3 rounded-lg"
                 type="text"
                 placeholder="Transfer to"
                 onChange={(e) => {
@@ -117,11 +119,13 @@ function Collections() {
                 }}
                 value={activeInput === i ? addressTransferSingle : ""}
               />
+            </div>
+            <div className="bg-light-black px-5 py-3">
               <button
                 onClick={() =>
                   handleTransferSingle(itemData[i].id, itemData[i].img)
                 }
-                className="mt-2 px-5 py-2 hover:bg-pink-500 bg-pink-600 text-white text-xs font-bold rounded-lg"
+                className="w-full px-5 py-2 hover:bg-blue-500 bg-blue-600 text-white text-xs font-bold rounded-lg"
               >
                 Transfer
               </button>
@@ -220,7 +224,7 @@ function Collections() {
                 </h2>
               </div>
 
-              <div className="w-1/2 ml-10 text-white">
+              {/* <div className="w-1/2 ml-10 text-white">
                 <p className="text-sm font-light text-center">
                   You can transfer your precious ordinals to your other wallet
                   to make them safe, to exclude them when you trade on uniswap.
@@ -228,17 +232,19 @@ function Collections() {
                 <p className="border border-white text-xs py-2 px-5 rounded-xl mt-2">
                   Check the checkbox to transfer multiple ordinals
                 </p>
-              </div>
+              </div> */}
             </div>
 
-            <div className="grid grid-cols-6 gap-6 bg-custom-black p-10 rounded-xl">
+            <div className="grid grid-cols-7 gap-6 rounded-xl">
               {collectionList()}
             </div>
 
-            <div className="mt-7 flex justify-end">{paginationButton()}</div>
+            <div className="mt-7 flex justify-end mb-5">
+              {paginationButton()}
+            </div>
             {/* Selected item ============================== */}
-            <div>
-              <input
+            <div className="bg-custom-black p-10 rounded-3xl mt-7">
+              {/* <input
                 type="number"
                 placeholder="Amount"
                 className="w-36 px-6 py-2 rounded-full mr-4 text-sm"
@@ -252,12 +258,22 @@ function Collections() {
               />
 
               <button onClick={handleTransfer} className={style.btnUniversal}>
-                Transfer Without Selecting
-              </button>
+                Transfer Without Selecting (testing only)
+              </button> */}
 
-              <h1 className="text-indigo-300 mt-5 mb-5 text-sm font-bold">
+              <h1 className="text-indigo-300 mb-5 text-sm font-bold">
                 Selected Ordinals:
               </h1>
+
+              <button
+                onClick={() => setSelectedItemData([])}
+                className="text-white text-xs font-bold bg-red-500 hover:bg-red-600 px-5 py-2 rounded-full mb-3"
+              >
+                Cancel All
+              </button>
+              <div className="flex border border-gray-700 p-8 rounded-3xl mb-10">
+                {selectedOrdinals()}
+              </div>
               <input
                 type="text"
                 placeholder="Transfer to"
@@ -270,18 +286,9 @@ function Collections() {
               >
                 Transfer
               </button>
-              <p className="mb-5 text-sm text-gray-200">
+              <p className="text-xs text-gray-200">
                 Keep in mind, the more you transfer the more gas you'll pay.
               </p>
-              <button
-                onClick={() => setSelectedItemData([])}
-                className="text-white text-xs font-bold bg-red-500 hover:bg-red-600 px-5 py-2 rounded-full mb-3"
-              >
-                Cancel All
-              </button>
-              <div className="flex border border-gray-700 p-8 rounded-3xl mb-10">
-                {selectedOrdinals()}
-              </div>
             </div>
           </>
         )}

@@ -5,8 +5,11 @@ import { ToastContainer } from "react-toastify";
 import { initialStateUpdate } from "../module";
 import { trimString } from "./helper";
 import AppContext from "../Context";
-import ethImage from "../assets/eth.png";
 import { style } from "./style";
+import bag from "../assets/bag.png";
+import ethImage from "../assets/eth.png";
+import mint from "../assets/mint.png";
+import box from "../assets/box.png";
 
 function Dapp() {
   const {
@@ -58,8 +61,8 @@ function Dapp() {
   return (
     <div>
       {/* Navigation ======================================================= */}
-      <div className="w-80 h-screen bg-custom-black py-10 px-5 text-center fixed top-0 left-0">
-        <img className="w-3/5 mx-auto my-0" src={ethImage} alt="" />
+      <div className="w-80 h-screen bg-custom-black py-7 px-2 text-center fixed top-0 left-0">
+        <img className="w-1/3 mx-auto my-0" src={ethImage} alt="" />
         <button onClick={connect} className={style.btnUniversal}>
           {isConnected ? "Account connected" : "Connect"}
         </button>
@@ -68,13 +71,22 @@ function Dapp() {
         )}
         <div className="mt-10 px-5">
           <NavLink to="/dapp/collections" className={style.link}>
-            Collections
+            <div className="flex items-center">
+              <img src={bag} className="mr-3 w-6" />
+              <p> Collections</p>
+            </div>
           </NavLink>
           <NavLink to="/dapp/mint" className={style.link}>
-            Mint
+            <div className="flex items-center">
+              <img src={mint} className="mr-3 w-6" />
+              <p>Mint</p>
+            </div>
           </NavLink>
           <NavLink to="/dapp/ordinal" className={style.link}>
-            View an Ordinal
+            <div className="flex items-center">
+              <img src={box} className="mr-3 w-6" />
+              <p>View an Ordinal</p>
+            </div>
           </NavLink>
           <NavLink to="/dapp/bounties" className={style.link}>
             Bounties
