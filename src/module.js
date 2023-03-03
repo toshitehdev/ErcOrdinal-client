@@ -46,21 +46,32 @@ export const initialStateUpdate = async (
   addConnection,
   addAddress,
   addCollectionAmount,
-  addItemData
+  addItemData,
+  addMintPrice
 ) => {
   try {
     const tokenHoldings = await contract.getAddressToIds(account);
     const itemData = await fetchIPFS(tokenHoldings);
+    const getPrice = await contract.mint_price();
     addConnection(true);
     addAddress(account);
     addCollectionAmount(tokenHoldings.length);
     addItemData(itemData);
+    // addMintPrice(ethers.toNumber(mint_price));
+    const stringify = getPrice.toString();
+    const mint_price = ethers.formatEther(stringify);
+    addMintPrice(mint_price);
+    // console.log(mint_price);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const stateUpdate = async (addCollectionAmount, addItemData) => {
+export const stateUpdate = async (
+  addCollectionAmount,
+  addItemData,
+  addMintPrice
+) => {
   try {
     const accounts = await window.ethereum.request({
       method: "eth_accounts",
@@ -69,6 +80,10 @@ export const stateUpdate = async (addCollectionAmount, addItemData) => {
     if (accounts.length > 0) {
       const tokenHoldings = await contract.getAddressToIds(account);
       const itemData = await fetchIPFS(tokenHoldings);
+      const getPrice = await contract.mint_price();
+      const stringify = getPrice.toString();
+      const mint_price = ethers.formatEther(stringify);
+      addMintPrice(mint_price);
       addCollectionAmount(tokenHoldings.length);
       addItemData(itemData);
     }
@@ -84,7 +99,15 @@ export const mint = async () => {
     contractABI,
     signer
   );
-  const tx = await contractSigned.mint({ value: ethers.parseEther("0.02") });
+
+  const getPrice = await contract.mint_price();
+  const stringify = getPrice.toString();
+  const mint_price = ethers.formatEther(stringify);
+
+  const tx = await contractSigned.mint({
+    value: ethers.parseEther(`${mint_price}`),
+  });
+
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();
   const logs = contract.interface.parseLog(response.logs[0]);
@@ -100,9 +123,14 @@ export const mintMany = async (amount) => {
     contractABI,
     signer
   );
-  const pricePaid = amount * 0.02;
+
+  const getPrice = await contract.mint_price();
+  const stringify = getPrice.toString();
+  const mint_price = ethers.formatEther(stringify);
+  const priceToPay = Number(mint_price) * amount;
+
   const tx = await contractSigned.mintMany(amount, {
-    value: ethers.parseEther(`${pricePaid}`),
+    value: ethers.parseEther(`${priceToPay}`),
   });
   const response = await provider.getTransactionReceipt(tx.hash);
   await response.confirmations();

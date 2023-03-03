@@ -29,6 +29,8 @@ function Collections() {
     itemData,
     addItemData,
     addOrdinalIdView,
+    mintPrice,
+    addMintPrice,
   } = useContext(AppContext);
 
   const handleTransferSingle = async (id) => {
@@ -79,8 +81,8 @@ function Collections() {
                 placeholder="Transfer to"
               />
             </div>
-            <div className="bg-light-black px-5 py-3">
-              <button className="w-full px-5 py-2 hover:bg-pink-500 bg-pink-600 text-white text-xs font-bold rounded-lg">
+            <div className="bg-[#2d325b] px-5 py-3">
+              <button className="w-full px-5 py-2 hover:bg-pink-500 bg-[#426ee6] text-white text-xs font-bold rounded-lg">
                 Transfer
               </button>
             </div>
@@ -120,12 +122,12 @@ function Collections() {
                 value={activeInput === i ? addressTransferSingle : ""}
               />
             </div>
-            <div className="bg-light-black px-5 py-3">
+            <div className="bg-[#2d325b] px-5 py-3">
               <button
                 onClick={() =>
                   handleTransferSingle(itemData[i].id, itemData[i].img)
                 }
-                className="w-full px-5 py-2 hover:bg-blue-500 bg-blue-600 text-white text-xs font-bold rounded-lg"
+                className="w-full px-5 py-2 hover:bg-blue-500 bg-[#426ee6] text-white text-xs font-bold rounded-lg"
               >
                 Transfer
               </button>
@@ -188,7 +190,7 @@ function Collections() {
       return;
     }
     transfer(addressTransfer, transferAmount).then(() => {
-      stateUpdate(addCollectionAmount, addItemData).then(() => {
+      stateUpdate(addCollectionAmount, addItemData, addMintPrice).then(() => {
         toast.success("Ordinals Successfully Transfered!");
       });
     });
@@ -204,7 +206,7 @@ function Collections() {
     const idToSend = selectedItemData.map((item) => item.id);
     // console.log(idToSend);
     transferMany(addressTransferMany, idToSend).then(() => {
-      stateUpdate(addCollectionAmount, addItemData).then(() => {
+      stateUpdate(addCollectionAmount, addItemData, addMintPrice).then(() => {
         setSelectedItemData([]);
         toast.success("Ordinals Successfully Transfered!");
       });
@@ -243,7 +245,7 @@ function Collections() {
               {paginationButton()}
             </div>
             {/* Selected item ============================== */}
-            <div className="bg-custom-black p-10 rounded-3xl mt-7">
+            <div className="bg-[#2d325b] p-10 rounded-3xl mt-7">
               {/* <input
                 type="number"
                 placeholder="Amount"
@@ -267,7 +269,7 @@ function Collections() {
 
               <button
                 onClick={() => setSelectedItemData([])}
-                className="text-white text-xs font-bold bg-red-500 hover:bg-red-600 px-5 py-2 rounded-full mb-3"
+                className="text-white text-xs font-bold bg-[#f65171] hover:bg-red-600 px-5 py-2 rounded-full mb-3"
               >
                 Cancel All
               </button>

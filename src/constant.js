@@ -3,7 +3,18 @@ export const contractAddress = "0xf85895d097b2c25946bb95c4d11e2f3c035f8f0c";
 
 export const contractABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "_genesis_address",
+        type: "address",
+      },
+      {
+        internalType: "string",
+        name: "_base_uri",
+        type: "string",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -144,16 +155,16 @@ export const contractABI = [
     type: "function",
   },
   {
-    inputs: [
+    inputs: [],
+    name: "base_uri",
+    outputs: [
       {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
-    name: "changeMaxTransfer",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -164,6 +175,19 @@ export const contractABI = [
         internalType: "uint256",
         name: "",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "genesis_adress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -277,19 +301,6 @@ export const contractABI = [
   },
   {
     inputs: [],
-    name: "max_transfer",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "mint",
     outputs: [],
     stateMutability: "payable",
@@ -310,12 +321,38 @@ export const contractABI = [
   },
   {
     inputs: [],
+    name: "mint_price",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "name",
     outputs: [
       {
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "price_addition",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

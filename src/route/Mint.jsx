@@ -7,11 +7,12 @@ import AppContext from "../Context";
 import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
-  const { addCollectionAmount, addItemData } = useContext(AppContext);
+  const { addCollectionAmount, addItemData, mintPrice, addMintPrice } =
+    useContext(AppContext);
   const [mintAmount, setMintAmount] = useState("");
   const handleMintSingle = () => {
-    mint().then((id) => {
-      stateUpdate(addCollectionAmount, addItemData);
+    mint(addMintPrice).then((id) => {
+      stateUpdate(addCollectionAmount, addItemData, addMintPrice);
       toast.success(`Succesfully Minted #${id}`);
     });
   };
@@ -25,8 +26,8 @@ function Mint() {
     if (mintAmount < 1) {
       return;
     }
-    mintMany(mintAmount).then((ids) => {
-      stateUpdate(addCollectionAmount, addItemData);
+    mintMany(mintAmount, addMintPrice).then((ids) => {
+      stateUpdate(addCollectionAmount, addItemData, addMintPrice);
       setMintAmount("");
       toast.success(`Succesfully Minted #${ids}`);
     });
@@ -38,12 +39,15 @@ function Mint() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white">
       <div className="w-full max-1200">
+        <h1 className="text-center">Last Minted: #311</h1>
         <div className="flex items-center justify-center">
           <div className="w-1/3">
             <img className="" src={ethmint} alt="" />
             <p className="text-sm mb-2">
               Mint Price:{" "}
-              <span className="font-bold text-pink-400 text-base">0.02</span>{" "}
+              <span className="font-bold text-pink-400 text-base">
+                {mintPrice}
+              </span>{" "}
               ETH
             </p>
             <p className="text-sm mb-5">
