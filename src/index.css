@@ -18,7 +18,7 @@
 }
 
 .max-1200 {
-  max-width: 1200px;
+  max-width: 1000px;
 }
 .bg-hover {
   background-color: #1c1f25;
@@ -53,4 +53,8 @@
 }
 .bg-custom-transparent {
   background-color: rgb(213 64 64 / 89%);
+}
+
+.bg-image {
+  background-image: url("./assets/bgplc.png");
 }

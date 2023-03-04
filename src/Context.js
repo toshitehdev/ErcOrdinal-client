@@ -11,8 +11,8 @@ export function AppProvider({ children }) {
   const [dataImg, setDataImg] = useState([]);
   const [itemData, setItemData] = useState([]);
   const [ordinalIdView, setOrdinalIdView] = useState(0);
-  const [tokenCounter, setTokenCounter] = useState(0);
   const [mintPrice, setMintPrice] = useState(0);
+  const [lastMintedId, setLastMintedId] = useState(0);
 
   const addConnection = (param) => {
     setIsConnected(param);
@@ -38,11 +38,11 @@ export function AppProvider({ children }) {
   const addOrdinalIdView = (param) => {
     setOrdinalIdView(param);
   };
-  const addTokenCounter = (param) => {
-    setTokenCounter(param);
-  };
   const addMintPrice = (param) => {
     setMintPrice(param);
+  };
+  const addLastMintedId = (param) => {
+    setLastMintedId(param);
   };
 
   const param = {
@@ -62,10 +62,10 @@ export function AppProvider({ children }) {
     addItemData,
     ordinalIdView,
     addOrdinalIdView,
-    addTokenCounter,
-    tokenCounter,
     addMintPrice,
     mintPrice,
+    lastMintedId,
+    addLastMintedId,
   };
 
   return <AppContext.Provider value={param}>{children}</AppContext.Provider>;

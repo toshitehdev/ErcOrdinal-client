@@ -6,7 +6,7 @@ import { initialStateUpdate } from "../module";
 import { trimString } from "./helper";
 import AppContext from "../Context";
 import { style } from "./style";
-import ethImage from "../assets/eth.png";
+import ercordinal from "../assets/ercordinal.png";
 
 import bag from "../assets/bag.png";
 import mint from "../assets/mint.png";
@@ -22,6 +22,7 @@ function Dapp() {
     addCollectionAmount,
     addItemData,
     addMintPrice,
+    addLastMintedId,
   } = useContext(AppContext);
   useEffect(() => {
     const checkAccount = async () => {
@@ -36,7 +37,8 @@ function Dapp() {
           addAddress,
           addCollectionAmount,
           addItemData,
-          addMintPrice
+          addMintPrice,
+          addLastMintedId
         );
       }
     };
@@ -67,13 +69,16 @@ function Dapp() {
       {/* w-72 h-4/5 top-1/2 -translate-y-1/2  left-10 */}
       {/* w-80 h-screen top-0 left-0 */}
       {/* Navigation ======================================================= */}
-      <div className="w-72 h-4/5 top-1/2 -translate-y-1/2  left-10 bg-[#202542] py-7 px-2 text-center fixed rounded-3xl">
-        <img className="w-1/3 mx-auto my-0" src={ethImage} alt="" />
+      <div className="w-60 2xl:h-4/5 h-full top-1/2 -translate-y-1/2 2xl:left-10 left-0  bg-[#202542] py-7 px-2 text-center fixed rounded-3xl">
+        <img className="w-1/3 mx-auto my-0 mb-7" src={ercordinal} alt="" />
+        {/* <p className="text-[#e3e1f8] text-sm mb-7">ErcOrdinal</p> */}
         <button onClick={connect} className={style.btnUniversal}>
           {isConnected ? "Account connected" : "Connect"}
         </button>
         {address && (
-          <p className="text-white text-xs italic">{trimString(address)}</p>
+          <p className="text-white text-xs italic mt-3">
+            {trimString(address)}
+          </p>
         )}
         <div className="mt-10 px-5">
           <NavLink to="/dapp/collections" className={style.link}>
@@ -107,11 +112,14 @@ function Dapp() {
             Marketplace <span className="italic text-indigo-400">soon</span>
           </NavLink>
           <NavLink to="/dapp/learning" className={style.link}>
+            FAQ
+          </NavLink>
+          <NavLink to="/dapp/learning" className={style.link}>
             Learning Material
           </NavLink>
         </div>
       </div>
-      <div className="pl-80 bg-[#252849]">
+      <div className="pl-60 2xl:pl-80 bg-[#252849]">
         <ToastContainer
           position="top-right"
           autoClose={4000}

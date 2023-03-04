@@ -7,14 +7,31 @@ import AppContext from "../Context";
 import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
-  const { addCollectionAmount, addItemData, mintPrice, addMintPrice } =
-    useContext(AppContext);
+  const {
+    addCollectionAmount,
+    addItemData,
+    mintPrice,
+    addMintPrice,
+    lastMintedId,
+  } = useContext(AppContext);
   const [mintAmount, setMintAmount] = useState("");
-  const handleMintSingle = () => {
-    mint(addMintPrice).then((id) => {
-      stateUpdate(addCollectionAmount, addItemData, addMintPrice);
-      toast.success(`Succesfully Minted #${id}`);
-    });
+  const handleMintSingle = async () => {
+    // try {
+    //   const _id = await mint(addMintPrice);
+    //   await stateUpdate(addCollectionAmount, addItemData, addMintPrice);
+    //   toast.success(`Succesfully Minted #${_id}`);
+    // } catch (error) {
+    //   toast.error(error.Error);
+    // }
+
+    mint(addMintPrice)
+      .then((id) => {
+        stateUpdate(addCollectionAmount, addItemData, addMintPrice);
+        toast.success(`Succesfully Minted #${id}`);
+      })
+      .catch((error) => {
+        toast.error(error.Error);
+      });
   };
   const handleMintMany = () => {
     if (!mintAmount) {
@@ -26,11 +43,15 @@ function Mint() {
     if (mintAmount < 1) {
       return;
     }
-    mintMany(mintAmount, addMintPrice).then((ids) => {
-      stateUpdate(addCollectionAmount, addItemData, addMintPrice);
-      setMintAmount("");
-      toast.success(`Succesfully Minted #${ids}`);
-    });
+    mintMany(mintAmount, addMintPrice)
+      .then((ids) => {
+        stateUpdate(addCollectionAmount, addItemData, addMintPrice);
+        setMintAmount("");
+        toast.success(`Succesfully Minted #${ids}`);
+      })
+      .catch((error) => {
+        toast.error("Hit price change point");
+      });
   };
   const handleWithdraw = () => {
     withdrawMintSale();
@@ -39,7 +60,7 @@ function Mint() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white">
       <div className="w-full max-1200">
-        <h1 className="text-center">Last Minted: #311</h1>
+        <h1 className="text-center">Last Minted: #{lastMintedId}</h1>
         <div className="flex items-center justify-center">
           <div className="w-1/3">
             <img className="" src={ethmint} alt="" />

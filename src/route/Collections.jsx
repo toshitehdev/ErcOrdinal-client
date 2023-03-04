@@ -7,6 +7,7 @@ import AppContext from "../Context";
 
 import ethPanda from "../assets/eth-panda.png";
 import placeholder from "../assets/placeholder.png";
+import bgplc from "../assets/bgplc.png";
 
 import { style } from "./style";
 
@@ -19,7 +20,7 @@ function Collections() {
   const [addressTransfer, setAddressTransfer] = useState("");
   const [transferAmount, setTransferAmount] = useState(null);
   const [activeInput, setActiveInput] = useState(null);
-  const step = 14;
+  const step = 21;
   const {
     isConnected,
     collectionAmount,
@@ -66,72 +67,57 @@ function Collections() {
       if (!itemData[i]) {
         arr.push(
           <div
-            key={`plch${i}`}
-            className="invisible border border-gray-700 rounded-2xl overflow-hidden relative"
+            key={`sdf${i}`}
+            className="invisible rounded-2xl overflow-hidden relative"
           >
-            <input type="checkbox" className="absolute top-3 right-3" />
-            <Link to="/dapp/ordinal" className="block px-5 pt-2">
-              <img className="" src={placeholder} alt="" />
-              <p className="font-bold mb-1 mt-3 text-white">#{}</p>
+            <input type="checkbox" className="absolute top-5 right-5" />
+            <Link to="/dapp/ordinal" className="block">
+              <div className="relative">
+                <img src={bgplc} alt="" loading="lazy" />
+                <img
+                  className="min-w-full absolute top-0 left-0"
+                  src={placeholder}
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="bg-[#2d325b] px-5 py-5">
+                <p className="font-bold text-white">#{0}</p>
+              </div>
             </Link>
-            <div className="px-2">
-              <input
-                className="border border-gray-500 px-3 py-2 text-xs w-full mb-3 rounded-lg"
-                type="text"
-                placeholder="Transfer to"
-              />
-            </div>
-            <div className="bg-[#2d325b] px-5 py-3">
-              <button className="w-full px-5 py-2 hover:bg-pink-500 bg-[#426ee6] text-white text-xs font-bold rounded-lg">
-                Transfer
-              </button>
-            </div>
           </div>
         );
       } else {
         arr.push(
           <div
             key={itemData[i].id}
-            className="border border-gray-700 rounded-2xl overflow-hidden relative"
+            className=" rounded-2xl overflow-hidden relative"
           >
             <input
               onChange={(e) => handleSelection(e, itemData[i])}
               type="checkbox"
-              className="absolute top-4 right-6"
+              className="absolute top-1 right-2 z-10"
               checked={selectedItemData.includes(itemData[i])}
             />
             <Link
               onClick={() => addOrdinalIdView(itemData[i].id)}
               to="/dapp/ordinal"
-              className="block px-5 pt-3"
+              className="block"
             >
-              <img className="" src={itemData[i].img} alt="" />
-              <p className="font-bold mb-1 mt-3 text-white">
-                #{itemData[i].id}
-              </p>
+              {/* <div className="bg-[#7f84a8] w-[133px] h-[133px] 2xl:w-[148px] 2xl:h-[148px]"> */}
+              <div className="relative">
+                <img src={bgplc} alt="" loading="lazy" />
+                <img
+                  className="min-w-full absolute top-0 left-0"
+                  src={itemData[i].img}
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="bg-[#2d325b] px-5 py-5">
+                <p className="font-bold text-white">#{itemData[i].id}</p>
+              </div>
             </Link>
-            <div className="px-2">
-              <input
-                className="border border-gray-500 px-3 py-2 text-xs w-full mb-3 rounded-lg"
-                type="text"
-                placeholder="Transfer to"
-                onChange={(e) => {
-                  setActiveInput(i);
-                  addAddressToTransfer(e.target.value);
-                }}
-                value={activeInput === i ? addressTransferSingle : ""}
-              />
-            </div>
-            <div className="bg-[#2d325b] px-5 py-3">
-              <button
-                onClick={() =>
-                  handleTransferSingle(itemData[i].id, itemData[i].img)
-                }
-                className="w-full px-5 py-2 hover:bg-blue-500 bg-[#426ee6] text-white text-xs font-bold rounded-lg"
-              >
-                Transfer
-              </button>
-            </div>
           </div>
         );
       }
@@ -215,26 +201,33 @@ function Collections() {
 
   return (
     <div className="min-h-screen py-5">
-      <div className=" w-full mt-5 max-1200 mx-auto my-0">
+      <div className="mt-5 w-10/12 mx-auto my-0">
         {isConnected && (
           <>
-            <div className="linear p-5 mb-7 rounded-2xl flex items-center">
-              <img src={ethPanda} className="h-24" alt="" />
-              <div className=" w-16 h-16 pinky-linear justify-center rounded-full ml-10 flex items-center">
-                <h2 className="text-white font-bold text-lg">
+            <div className="linear px-4 py-3 mb-7 rounded-2xl flex items-center">
+              <img src={ethPanda} className="h-16" alt="" />
+              <div className=" w-16 h-16 pinky-linear justify-center rounded-full ml-5 flex items-center mr-10">
+                <h2 className="text-white font-bold text-sm">
                   {collectionAmount}
                 </h2>
               </div>
 
-              {/* <div className="w-1/2 ml-10 text-white">
-                <p className="text-sm font-light text-center">
-                  You can transfer your precious ordinals to your other wallet
-                  to make them safe, to exclude them when you trade on uniswap.
-                </p>
-                <p className="border border-white text-xs py-2 px-5 rounded-xl mt-2">
-                  Check the checkbox to transfer multiple ordinals
-                </p>
-              </div> */}
+              <input
+                type="number"
+                placeholder="Amount"
+                className="w-24 px-6 py-2 rounded-full mr-4 text-xs"
+                onChange={(e) => setTransferAmount(Number(e.target.value))}
+              />
+              <input
+                type="text"
+                placeholder="Transfer to"
+                className="w-56 px-6 py-2 rounded-full mr-4 text-xs"
+                onChange={(e) => setAddressTransfer(e.target.value)}
+              />
+
+              <button onClick={handleTransfer} className={style.btnUniversal}>
+                Transfer Without Selecting
+              </button>
             </div>
 
             <div className="grid grid-cols-7 gap-6 rounded-xl">
@@ -246,23 +239,6 @@ function Collections() {
             </div>
             {/* Selected item ============================== */}
             <div className="bg-[#2d325b] p-10 rounded-3xl mt-7">
-              {/* <input
-                type="number"
-                placeholder="Amount"
-                className="w-36 px-6 py-2 rounded-full mr-4 text-sm"
-                onChange={(e) => setTransferAmount(Number(e.target.value))}
-              />
-              <input
-                type="text"
-                placeholder="Transfer to"
-                className="w-96 px-6 py-2 rounded-full mr-4 text-sm"
-                onChange={(e) => setAddressTransfer(e.target.value)}
-              />
-
-              <button onClick={handleTransfer} className={style.btnUniversal}>
-                Transfer Without Selecting (testing only)
-              </button> */}
-
               <h1 className="text-indigo-300 mb-5 text-sm font-bold">
                 Selected Ordinals:
               </h1>
@@ -288,7 +264,7 @@ function Collections() {
               >
                 Transfer
               </button>
-              <p className="text-xs text-gray-200">
+              <p className="text-xs text-gray-200 mt-3 italic">
                 Keep in mind, the more you transfer the more gas you'll pay.
               </p>
             </div>

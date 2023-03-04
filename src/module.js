@@ -47,12 +47,16 @@ export const initialStateUpdate = async (
   addAddress,
   addCollectionAmount,
   addItemData,
-  addMintPrice
+  addMintPrice,
+  addLastMintedId
 ) => {
   try {
+    let lastMintedId = undefined;
     const tokenHoldings = await contract.getAddressToIds(account);
     const itemData = await fetchIPFS(tokenHoldings);
     const getPrice = await contract.mint_price();
+    const token_counter = await contract.token_counter();
+    lastMintedId = ethers.toNumber(token_counter) - 1;
     addConnection(true);
     addAddress(account);
     addCollectionAmount(tokenHoldings.length);
@@ -62,6 +66,15 @@ export const initialStateUpdate = async (
     const mint_price = ethers.formatEther(stringify);
     addMintPrice(mint_price);
     // console.log(mint_price);
+    addLastMintedId(lastMintedId);
+    contract.on("Mint", async (address, id) => {
+      lastMintedId = ethers.toNumber(id) - 1;
+      addLastMintedId(lastMintedId);
+      const getPrice = await contract.mint_price();
+      const stringify = getPrice.toString();
+      const mint_price = ethers.formatEther(stringify);
+      addMintPrice(mint_price);
+    });
   } catch (error) {
     console.log(error);
   }
@@ -92,7 +105,7 @@ export const stateUpdate = async (
   }
 };
 
-export const mint = async () => {
+export const mint = async (addMintPrice) => {
   const signer = await provider.getSigner();
   const contractSigned = new ethers.Contract(
     contractAddress,
@@ -113,34 +126,40 @@ export const mint = async () => {
   const logs = contract.interface.parseLog(response.logs[0]);
   //this is -1 because token_counter start from 1, tokenId start from 0
   const mintedId = ethers.toNumber(logs.args["1"]) - 1;
+  addMintPrice(mint_price);
   return mintedId;
 };
 
-export const mintMany = async (amount) => {
+export const mintMany = async (amount, addMintPrice) => {
   const signer = await provider.getSigner();
   const contractSigned = new ethers.Contract(
     contractAddress,
     contractABI,
     signer
   );
+  try {
+    const getPrice = await contract.mint_price();
+    const stringify = getPrice.toString();
+    const mint_price = ethers.formatEther(stringify);
+    const priceToPay = Number(mint_price) * amount;
 
-  const getPrice = await contract.mint_price();
-  const stringify = getPrice.toString();
-  const mint_price = ethers.formatEther(stringify);
-  const priceToPay = Number(mint_price) * amount;
-
-  const tx = await contractSigned.mintMany(amount, {
-    value: ethers.parseEther(`${priceToPay}`),
-  });
-  const response = await provider.getTransactionReceipt(tx.hash);
-  await response.confirmations();
-  const mintedIds = [];
-  for (let i = 0; i < response.logs.length; i++) {
-    let logs = contract.interface.parseLog(response.logs[i]);
-    let mintedId = ethers.toNumber(logs.args["1"]) - 1;
-    mintedIds.push(mintedId);
+    const tx = await contractSigned.mintMany(amount, {
+      value: ethers.parseEther(`${priceToPay}`),
+    });
+    const response = await provider.getTransactionReceipt(tx.hash);
+    await response.confirmations();
+    const mintedIds = [];
+    for (let i = 0; i < response.logs.length; i++) {
+      let logs = contract.interface.parseLog(response.logs[i]);
+      let mintedId = ethers.toNumber(logs.args["1"]) - 1;
+      mintedIds.push(mintedId);
+    }
+    addMintPrice(mint_price);
+    return mintedIds;
+  } catch (error) {
+    // console.log(error);
+    throw error;
   }
-  return mintedIds;
 };
 
 export const transfer = async (recipient, amount) => {
