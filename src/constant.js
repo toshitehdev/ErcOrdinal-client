@@ -169,6 +169,13 @@ export const contractABI = [
   },
   {
     inputs: [],
+    name: "claimBounty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "decimals",
     outputs: [
       {
@@ -283,6 +290,25 @@ export const contractABI = [
         type: "uint256",
       },
     ],
+    name: "idToPrize",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     name: "idToTokens",
     outputs: [
       {
@@ -356,6 +382,24 @@ export const contractABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "_ids",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_free_mint_amount",
+        type: "uint256",
+      },
+    ],
+    name: "setIdToPrize",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

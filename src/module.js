@@ -141,10 +141,11 @@ export const mintMany = async (amount, addMintPrice) => {
     const getPrice = await contract.mint_price();
     const stringify = getPrice.toString();
     const mint_price = ethers.formatEther(stringify);
-    const priceToPay = Number(mint_price) * amount;
+    const priceToPay = ethers.toBigInt(getPrice) * ethers.toBigInt(amount);
+    const p = ethers.formatEther(priceToPay);
 
     const tx = await contractSigned.mintMany(amount, {
-      value: ethers.parseEther(`${priceToPay}`),
+      value: ethers.parseEther(`${p}`),
     });
     const response = await provider.getTransactionReceipt(tx.hash);
     await response.confirmations();
@@ -157,7 +158,7 @@ export const mintMany = async (amount, addMintPrice) => {
     addMintPrice(mint_price);
     return mintedIds;
   } catch (error) {
-    // console.log(error);
+    // console.log(error);s
     throw error;
   }
 };

@@ -201,7 +201,7 @@ function Collections() {
 
   return (
     <div className="min-h-screen py-5">
-      <div className="mt-5 w-10/12 mx-auto my-0">
+      <div className="mt-5 w-10/12 max-w-[1300px] mx-auto my-0">
         {isConnected && (
           <>
             <div className="linear px-4 py-3 mb-7 rounded-2xl flex items-center">
@@ -233,10 +233,12 @@ function Collections() {
             <div className="grid grid-cols-7 gap-6 rounded-xl">
               {collectionList()}
             </div>
-
-            <div className="mt-7 flex justify-end mb-5">
-              {paginationButton()}
+            <div className="flex  px-1 dir-rtl">
+              <div className="mt-7 overflow-x-auto custom-scroll flex mb-5 dir-ltr py-2">
+                {paginationButton()}
+              </div>
             </div>
+
             {/* Selected item ============================== */}
             <div className="bg-[#2d325b] p-10 rounded-3xl mt-7">
               <h1 className="text-indigo-300 mb-5 text-sm font-bold">

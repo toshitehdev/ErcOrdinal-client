@@ -40,8 +40,8 @@ function Ordinal() {
     }
   };
   return (
-    <div className="min-h-screen w-full p-14 text-white">
-      <div className="max-1200 bg-[#2d325b] p-16 mx-auto my-0 rounded-3xl">
+    <div className="min-h-screen p-16 text-white relative">
+      <div className="w-2/5 bg-[#2d325b] px-5 py-7 pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl">
         <form
           onSubmit={(e) => handleTokenFetch(e)}
           className="flex justify-end items-center mb-10"
@@ -62,8 +62,8 @@ function Ordinal() {
             </button>
           </div>
         </form>
-        <div className="w-3/4 mx-auto my-0 border-2 border-[#4f5596] rounded-3xl overflow-hidden">
-          <div className="w-80 mx-auto my-0 p-5">
+        <div className="w-4/5 mx-auto my-0 border-2 border-[#4f5596] rounded-3xl overflow-hidden">
+          <div className="w-64 mx-auto my-0 p-5">
             <img src={singleImg} />
           </div>
 
