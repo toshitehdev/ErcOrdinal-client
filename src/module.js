@@ -130,7 +130,7 @@ export const mint = async (addMintPrice) => {
   return mintedId;
 };
 
-export const mintMany = async (amount, addMintPrice) => {
+export const mintMany = async (amount, addMintPrice, cb) => {
   const signer = await provider.getSigner();
   const contractSigned = new ethers.Contract(
     contractAddress,
@@ -149,11 +149,21 @@ export const mintMany = async (amount, addMintPrice) => {
     });
     const response = await provider.getTransactionReceipt(tx.hash);
     await response.confirmations();
+    // console.log(response.logs);
     const mintedIds = [];
     for (let i = 0; i < response.logs.length; i++) {
-      let logs = contract.interface.parseLog(response.logs[i]);
-      let mintedId = ethers.toNumber(logs.args["1"]) - 1;
-      mintedIds.push(mintedId);
+      let logs = contract.interface.parseLog({
+        data: response.logs[i].data,
+        topics: response.logs[i].topics,
+      });
+      if (logs.name == "Mint") {
+        let mintedId = ethers.toNumber(logs.args["1"]) - 1;
+        mintedIds.push(mintedId);
+      }
+      if (logs.name == "EligibleBounty") {
+        //toast when user won a bounty
+        cb();
+      }
     }
     addMintPrice(mint_price);
     return mintedIds;
@@ -252,7 +262,7 @@ export const setEligibleIds = async (ids, amount) => {
 
 //all eligible id, claimed and not claimed
 export const idIsEligible = async () => {
-  const arr = [160, 165, 180];
+  const arr = [180, 185, 190, 195, 200];
   const promises = [];
   arr.map((item) => {
     const tx = contract.idIsEligible(item);
@@ -282,21 +292,14 @@ export const idIsEligible = async () => {
         is_eligible: item.response.is_eligible,
         is_claimed: item.response.is_claimed,
         prize_amount: ethers.toNumber(item.response.prize_amount),
+        from_claiming: item.response.from_claiming,
       };
     }
   });
+  //need to theck for eligibility because minting
+  //get because of free mint, will not be added
+  //idToEligibleForBounty
   return result.filter((item) => item);
-};
-
-export const subscribeBountyAdded = async () => {
-  contract.on("EligibleBounty", async (minter, id, prize_amount) => {
-    const idWind = {
-      minter,
-      id,
-      prize_amount,
-    };
-    console.log(idWind);
-  });
 };
 
 export const claimBounty = async (id) => {

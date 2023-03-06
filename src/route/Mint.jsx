@@ -1,29 +1,23 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { style } from "./style";
-import { mint, mintMany, stateUpdate, withdrawMintSale } from "../module";
+import { mint, mintMany, stateUpdate } from "../module";
 import AppContext from "../Context";
 
 import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
   const {
+    address,
     addCollectionAmount,
     addItemData,
     mintPrice,
     addMintPrice,
     lastMintedId,
   } = useContext(AppContext);
+
   const [mintAmount, setMintAmount] = useState("");
   const handleMintSingle = async () => {
-    // try {
-    //   const _id = await mint(addMintPrice);
-    //   await stateUpdate(addCollectionAmount, addItemData, addMintPrice);
-    //   toast.success(`Succesfully Minted #${_id}`);
-    // } catch (error) {
-    //   toast.error(error.Error);
-    // }
-
     mint(addMintPrice)
       .then((id) => {
         stateUpdate(addCollectionAmount, addItemData, addMintPrice);
@@ -33,6 +27,7 @@ function Mint() {
         toast.error(error.Error);
       });
   };
+
   const handleMintMany = () => {
     if (!mintAmount) {
       return;
@@ -43,7 +38,11 @@ function Mint() {
     if (mintAmount < 1) {
       return;
     }
-    mintMany(mintAmount, addMintPrice)
+    mintMany(mintAmount, addMintPrice, () => {
+      toast.success("You Just Won The Bounty", {
+        icon: "🚀",
+      });
+    })
       .then((ids) => {
         stateUpdate(addCollectionAmount, addItemData, addMintPrice);
         setMintAmount("");

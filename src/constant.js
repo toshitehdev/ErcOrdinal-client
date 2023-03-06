@@ -384,6 +384,11 @@ export const contractABI = [
         name: "is_claimed",
         type: "bool",
       },
+      {
+        internalType: "bool",
+        name: "from_claiming",
+        type: "bool",
+      },
     ],
     stateMutability: "view",
     type: "function",

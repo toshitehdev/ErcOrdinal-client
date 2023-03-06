@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  setEligibleIds,
-  idIsEligible,
-  subscribeBountyAdded,
-  claimBounty,
-} from "../module";
+
+import { setEligibleIds, idIsEligible, claimBounty } from "../module";
 import { style } from "./style";
 import AppContext from "../Context";
 
@@ -13,7 +9,7 @@ function Bounty() {
   const [amount, setAmount] = useState();
   const [claimedId, setClaimedId] = useState([]);
   const [unclaimedId, setUnclaimedId] = useState([]);
-  const { itemData } = useContext(AppContext);
+  const { itemData, address } = useContext(AppContext);
 
   useEffect(() => {
     async function getEligibility() {
@@ -22,7 +18,6 @@ function Bounty() {
       const claimed = nn.filter((item) => item.is_claimed == true);
       setClaimedId(claimed);
       setUnclaimedId(unclaimed);
-      subscribeBountyAdded();
     }
     getEligibility();
   }, []);
@@ -34,30 +29,29 @@ function Bounty() {
     if (!selectedId) {
       return;
     }
-    //160.170.180
-    // console.log(JSON.parse(selectedId));
     setEligibleIds(JSON.parse(selectedId), amount);
   };
   const renderUnclaimed = () => {
     return unclaimedId.map((item) => {
-      return (
-        <div key={item.id}>
-          {
-            <p className="text-white">
-              id: {item.id}, prize: {item.prize_amount} free mint
-            </p>
-          }
-        </div>
-      );
+      if (!item.from_claiming) {
+        return (
+          <div key={item.id}>
+            {
+              <p className="text-white">
+                id: {item.id}, prize: {item.prize_amount} free mint
+              </p>
+            }
+          </div>
+        );
+      }
     });
   };
   const renderClaimed = () => {
     return claimedId.map((item) => {
       return (
-        <div>
+        <div key={item.id}>
           {
             <p className="text-white">
-              {" "}
               id: {item.id}, claimed prize: {item.prize_amount} free mint
             </p>
           }
@@ -74,13 +68,12 @@ function Bounty() {
     //update state here
     setClaimedId(claimed);
     setUnclaimedId(unclaimed);
-    subscribeBountyAdded();
   };
 
   const renderUserBounty = () => {
     return unclaimedId.map((item) => {
       return itemData.map((data) => {
-        if (data.id == item.id) {
+        if (data.id == item.id && !item.from_claiming) {
           return (
             <div key={item.id}>
               {
