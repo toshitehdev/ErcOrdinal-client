@@ -7,6 +7,7 @@ import Dapp from "./route/Dapp";
 import Collections from "./route/Collections";
 import Mint from "./route/Mint";
 import Ordinal from "./route/Ordinal";
+import Bounty from "./route/Bounty";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/dapp/collections" element={<Collections />} />
             <Route path="/dapp/mint" element={<Mint />} />
             <Route path="/dapp/ordinal/" element={<Ordinal />} />
+            <Route path="/dapp/bounties/" element={<Bounty />} />
           </Route>
         </Routes>
       </AppProvider>

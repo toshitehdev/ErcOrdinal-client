@@ -104,7 +104,7 @@ function Mint() {
             Keep in mind, the more amount you mint the more gas you'll pay.
           </p>
           <p className="text-xs text-[#a3a0c2]">
-            Price will be up at every 100 #id.
+            Price will be up at every 500 #id.
           </p>
         </div>
       </div>

@@ -1,5 +1,7 @@
-// export const contractAddress = "0x053D452eCb7eF90E5fE0B4f96B7D37fDFfef2CF7";
-export const contractAddress = "0xf85895d097b2c25946bb95c4d11e2f3c035f8f0c";
+export const contractAddress =
+  process.env.NODE_ENV == "development"
+    ? process.env.REACT_APP_LOCALNODE_ADDRESS
+    : process.env.REACT_APP_REMOTENODE_ADDRESS;
 
 export const contractABI = [
   {
@@ -41,6 +43,44 @@ export const contractABI = [
       },
     ],
     name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "ClaimBounty",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "minter",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "prize_amount",
+        type: "uint256",
+      },
+    ],
+    name: "EligibleBounty",
     type: "event",
   },
   {
@@ -168,8 +208,32 @@ export const contractABI = [
     type: "function",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+    ],
     name: "claimBounty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_id",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_owner",
+        type: "address",
+      },
+    ],
+    name: "claimViaErc721",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -189,7 +253,20 @@ export const contractABI = [
   },
   {
     inputs: [],
-    name: "genesis_adress",
+    name: "ercordinal_erc721",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "genesis_address",
     outputs: [
       {
         internalType: "address",
@@ -290,11 +367,45 @@ export const contractABI = [
         type: "uint256",
       },
     ],
-    name: "idToPrize",
+    name: "idIsEligible",
     outputs: [
+      {
+        internalType: "bool",
+        name: "is_eligible",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "prize_amount",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "is_claimed",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "uint256",
         name: "",
+        type: "uint256",
+      },
+    ],
+    name: "idToEligibleForBounty",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "is_eligible",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "prize_amount",
         type: "uint256",
       },
     ],
@@ -312,24 +423,12 @@ export const contractABI = [
     name: "idToTokens",
     outputs: [
       {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
         internalType: "address",
         name: "owner",
         type: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "mint",
-    outputs: [],
-    stateMutability: "payable",
     type: "function",
   },
   {
@@ -388,16 +487,29 @@ export const contractABI = [
     inputs: [
       {
         internalType: "uint256[]",
-        name: "_ids",
+        name: "_eligible_ids",
         type: "uint256[]",
       },
       {
         internalType: "uint256",
-        name: "_free_mint_amount",
+        name: "_amount",
         type: "uint256",
       },
     ],
-    name: "setIdToPrize",
+    name: "setEligibleIds",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_erc721_address",
+        type: "address",
+      },
+    ],
+    name: "setErc721Address",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

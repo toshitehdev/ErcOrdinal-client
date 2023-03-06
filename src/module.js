@@ -237,3 +237,80 @@ export const withdrawMintSale = async () => {
   //do state update
   return response;
 };
+
+export const setEligibleIds = async (ids, amount) => {
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.setEligibleIds(ids, amount);
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+};
+
+//all eligible id, claimed and not claimed
+export const idIsEligible = async () => {
+  const arr = [160, 165, 180];
+  const promises = [];
+  arr.map((item) => {
+    const tx = contract.idIsEligible(item);
+    const txObj = {
+      tx,
+      txId: item,
+    };
+    promises.push(txObj);
+  });
+
+  const uu = Promise.all(
+    promises.map((res) => {
+      return res.tx.then((response) => {
+        return {
+          response,
+          id: res.txId,
+        };
+      });
+    })
+  );
+  const response = await uu;
+
+  const result = response.map((item) => {
+    if (item.response.is_eligible) {
+      return {
+        id: item.id,
+        is_eligible: item.response.is_eligible,
+        is_claimed: item.response.is_claimed,
+        prize_amount: ethers.toNumber(item.response.prize_amount),
+      };
+    }
+  });
+  return result.filter((item) => item);
+};
+
+export const subscribeBountyAdded = async () => {
+  contract.on("EligibleBounty", async (minter, id, prize_amount) => {
+    const idWind = {
+      minter,
+      id,
+      prize_amount,
+    };
+    console.log(idWind);
+  });
+};
+
+export const claimBounty = async (id) => {
+  // console.log(recipient, id);
+  const signer = await provider.getSigner();
+  const contractSigned = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  );
+  const tx = await contractSigned.claimBounty(id);
+
+  const response = await provider.getTransactionReceipt(tx.hash);
+  await response.confirmations();
+  //do state update, update collection
+  return response;
+};
