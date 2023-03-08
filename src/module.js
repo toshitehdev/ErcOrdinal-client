@@ -262,13 +262,15 @@ export const setEligibleIds = async (ids, amount) => {
 
 //all eligible id, claimed and not claimed
 export const idIsEligible = async () => {
-  const arr = [180, 185, 190, 195, 200];
+  const fetchId = await fetch("https://ercordinal.xyz/api/logs");
+  const resJson = await fetchId.json();
+
   const promises = [];
-  arr.map((item) => {
-    const tx = contract.idIsEligible(item);
+  resJson.map((item) => {
+    const tx = contract.idIsEligible(item.id);
     const txObj = {
       tx,
-      txId: item,
+      txId: item.id,
     };
     promises.push(txObj);
   });

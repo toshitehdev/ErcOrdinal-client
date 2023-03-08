@@ -54,6 +54,12 @@ export const contractABI = [
         name: "id",
         type: "uint256",
       },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
     name: "ClaimBounty",
     type: "event",
@@ -74,13 +80,54 @@ export const contractABI = [
         type: "uint256",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
         name: "prize_amount",
         type: "uint256",
       },
     ],
     name: "EligibleBounty",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "bool",
+            name: "is_eligible",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "prize_amount",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "is_claimed",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "from_claiming",
+            type: "bool",
+          },
+        ],
+        indexed: false,
+        internalType: "struct ErcOrdinal.EligiblePrize",
+        name: "eligible_prize",
+        type: "tuple",
+      },
+    ],
+    name: "EligibleIds",
     type: "event",
   },
   {
@@ -125,6 +172,19 @@ export const contractABI = [
       },
     ],
     name: "Transfer",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "UnclaimedBounty",
     type: "event",
   },
   {
@@ -515,6 +575,24 @@ export const contractABI = [
       },
     ],
     name: "setErc721Address",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "_eligible_ids",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "setUniswapResurrection",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

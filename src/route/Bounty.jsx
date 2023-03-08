@@ -9,6 +9,8 @@ function Bounty() {
   const [amount, setAmount] = useState();
   const [claimedId, setClaimedId] = useState([]);
   const [unclaimedId, setUnclaimedId] = useState([]);
+  const [expiredId, setIsExpiredId] = useState([]);
+
   const { itemData, address } = useContext(AppContext);
 
   useEffect(() => {
@@ -16,8 +18,10 @@ function Bounty() {
       const nn = await idIsEligible();
       const unclaimed = nn.filter((item) => item.is_claimed == false);
       const claimed = nn.filter((item) => item.is_claimed == true);
+      const expired = nn.filter((item) => item.from_claiming == true);
       setClaimedId(claimed);
       setUnclaimedId(unclaimed);
+      setIsExpiredId(expired);
     }
     getEligibility();
   }, []);
@@ -59,7 +63,19 @@ function Bounty() {
       );
     });
   };
-
+  const renderExpired = () => {
+    return expiredId.map((item) => {
+      return (
+        <div key={item.id}>
+          {
+            <p className="text-white">
+              id: {item.id}, expired prize: {item.prize_amount} free mint
+            </p>
+          }
+        </div>
+      );
+    });
+  };
   const handleClaimBounty = async (id) => {
     await claimBounty(id);
     const nn = await idIsEligible();
@@ -133,6 +149,10 @@ function Bounty() {
       <div className="w-4/5 border border-gray-500 p-10 mb-5">
         <p>Claimed Bounties</p>
         {renderClaimed()}
+      </div>
+      <div className="w-4/5 border border-gray-500 p-10 mb-5 mt-5">
+        <p>Expired Bounties</p>
+        {renderExpired()}
       </div>
       <div className="w-4/5 border border-gray-500 p-10 mb-5">
         <p>Your Available Bounty to Claim:</p>
