@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { NavLink } from "react-router-dom";
 
 import { setEligibleIds, idIsEligible, claimBounty } from "../module";
 import { style } from "./style";
@@ -39,10 +40,11 @@ function Bounty() {
     return unclaimedId.map((item) => {
       if (!item.from_claiming) {
         return (
-          <div key={item.id}>
+          <div key={item.id} className="border border-gray-400 text-xs p-3">
             {
               <p className="text-white">
-                id: {item.id}, prize: {item.prize_amount} free mint
+                {item.prize_amount} /
+                <span className="font-semibold text-pink-400">#{item.id}</span>
               </p>
             }
           </div>
@@ -53,10 +55,11 @@ function Bounty() {
   const renderClaimed = () => {
     return claimedId.map((item) => {
       return (
-        <div key={item.id}>
+        <div key={item.id} className="border border-gray-400 text-xs p-3">
           {
             <p className="text-white">
-              id: {item.id}, claimed prize: {item.prize_amount} free mint
+              {item.prize_amount} /
+              <span className="font-semibold text-indigo-200">#{item.id}</span>
             </p>
           }
         </div>
@@ -66,10 +69,11 @@ function Bounty() {
   const renderExpired = () => {
     return expiredId.map((item) => {
       return (
-        <div key={item.id}>
+        <div key={item.id} className="border border-gray-400 text-xs p-3">
           {
             <p className="text-white">
-              id: {item.id}, expired prize: {item.prize_amount} free mint
+              {item.prize_amount} /
+              <span className="font-semibold text-gray-400">#{item.id}</span>
             </p>
           }
         </div>
@@ -81,9 +85,11 @@ function Bounty() {
     const nn = await idIsEligible();
     const unclaimed = nn.filter((item) => item.is_claimed == false);
     const claimed = nn.filter((item) => item.is_claimed == true);
+    const expired = nn.filter((item) => item.from_claiming == true);
     //update state here
     setClaimedId(claimed);
     setUnclaimedId(unclaimed);
+    setIsExpiredId(expired);
   };
 
   const renderUserBounty = () => {
@@ -91,16 +97,17 @@ function Bounty() {
       return itemData.map((data) => {
         if (data.id == item.id && !item.from_claiming) {
           return (
-            <div key={item.id}>
-              {
-                <p className="text-white">
-                  you own id: {item.id}, available prize: {item.prize_amount}{" "}
-                  free mint
-                </p>
-              }
+            <div
+              key={item.id}
+              className="text-center border border-indigo-500 pt-3"
+            >
+              {<p className="text-white text-sm">ID: #{item.id}</p>}
+              <p className="text-sm mb-3">
+                Prize: {item.prize_amount} free mint
+              </p>
               <button
                 onClick={() => handleClaimBounty(item.id)}
-                className={style.btnUniversal}
+                className={`${style.btnUniversal} w-full rounded-none`}
               >
                 Claim
               </button>
@@ -112,8 +119,8 @@ function Bounty() {
   };
 
   return (
-    <div className="min-h-screen w-full text-white">
-      <div className="pt-10">
+    <div className="min-h-screen text-white w-full py-5">
+      {/* <div className="pt-10">
         <p>Input id for bounties, format example: [id,id,id,id] .</p>
         <p>
           This action is for testing purpose only. Mainnet just use etherscan
@@ -141,22 +148,57 @@ function Bounty() {
       <p className="mt-5">
         -------This section below will be shown to user (will work on styling
         later)------------
-      </p>
-      <div className="w-4/5 border border-gray-500 p-10 mb-5 mt-5">
-        <p>Unclaimed Bounties</p>
-        {renderUnclaimed()}
-      </div>
-      <div className="w-4/5 border border-gray-500 p-10 mb-5">
-        <p>Claimed Bounties</p>
-        {renderClaimed()}
-      </div>
-      <div className="w-4/5 border border-gray-500 p-10 mb-5 mt-5">
-        <p>Expired Bounties</p>
-        {renderExpired()}
-      </div>
-      <div className="w-4/5 border border-gray-500 p-10 mb-5">
-        <p>Your Available Bounty to Claim:</p>
-        <div className="border border-purple-400 p-5">{renderUserBounty()}</div>
+      </p> */}
+      <div className="mt-5 w-10/12 max-w-[1300px] mx-auto my-0">
+        <div className="mb-5">
+          <NavLink
+            to="/bounties:id"
+            className="text-xs bg-[#8d409a] px-5 py-2 rounded-xl mr-4 font-semibold"
+          >
+            Free Mint Bounties
+          </NavLink>
+          <NavLink
+            to="/bounties:id"
+            className="text-xs border border-[#8d409a] px-5 py-2 rounded-xl font-semibold"
+          >
+            ETH Bounties
+          </NavLink>
+        </div>
+        <div className="grid grid-cols-2 gap-5 mt-10 ">
+          <div>
+            <p className="text-sm mb-2">
+              Unclaimed : [ prize amount | #claiming id ]
+            </p>
+            <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/2 overflow-y-auto">
+              <div className="grid grid-cols-4 gap-5 align-middle">
+                {renderUnclaimed()}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm mb-2">
+              Claimed : [ prize amount | #claiming id ]
+            </p>
+            <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/2 overflow-y-auto">
+              <div className="grid grid-cols-4 gap-5 align-middle">
+                {renderClaimed()}
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="text-sm mb-2">Expired:</p>
+        <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/3 overflow-y-auto">
+          <div className="grid grid-cols-8 gap-5 align-middle">
+            {renderExpired()}
+          </div>
+        </div>
+        <p className="text-sm mb-2">Your Available Bounty:</p>
+        <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl">
+          <div className="grid grid-cols-3 gap-5 align-middle">
+            {renderUserBounty()}
+          </div>
+        </div>
       </div>
     </div>
   );

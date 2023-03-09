@@ -265,43 +265,15 @@ export const idIsEligible = async () => {
   const fetchId = await fetch("https://ercordinal.xyz/api/logs");
   const resJson = await fetchId.json();
 
-  const promises = [];
-  resJson.map((item) => {
-    const tx = contract.idIsEligible(item.id);
-    const txObj = {
-      tx,
-      txId: item.id,
+  return resJson.map((item) => {
+    return {
+      id: item.id,
+      is_eligible: item.is_eligible,
+      is_claimed: item.is_claimed,
+      prize_amount: ethers.toNumber(item.prize_amount),
+      from_claiming: item.from_claiming,
     };
-    promises.push(txObj);
   });
-
-  const uu = Promise.all(
-    promises.map((res) => {
-      return res.tx.then((response) => {
-        return {
-          response,
-          id: res.txId,
-        };
-      });
-    })
-  );
-  const response = await uu;
-
-  const result = response.map((item) => {
-    if (item.response.is_eligible) {
-      return {
-        id: item.id,
-        is_eligible: item.response.is_eligible,
-        is_claimed: item.response.is_claimed,
-        prize_amount: ethers.toNumber(item.response.prize_amount),
-        from_claiming: item.response.from_claiming,
-      };
-    }
-  });
-  //need to theck for eligibility because minting
-  //get because of free mint, will not be added
-  //idToEligibleForBounty
-  return result.filter((item) => item);
 };
 
 export const claimBounty = async (id) => {
