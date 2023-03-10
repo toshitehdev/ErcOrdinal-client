@@ -261,11 +261,23 @@ export const setEligibleIds = async (ids, amount) => {
 };
 
 //all eligible id, claimed and not claimed
-export const idIsEligible = async () => {
-  const fetchId = await fetch("https://ercordinal.xyz/api/logs");
+export const idIsEligible = async (
+  setClaimedId,
+  setUnclaimedId,
+  setIsExpiredId,
+  fetchFromClaim
+) => {
+  // const rr = await contract.idIsEligible(175);
+  // console.log(rr);
+  const fetchId = await fetch(
+    `${
+      fetchFromClaim
+        ? "http://127.0.0.1:5000/claim"
+        : "http://127.0.0.1:5000/logs"
+    }`
+  );
   const resJson = await fetchId.json();
-
-  return resJson.map((item) => {
+  const dataArray = resJson.map((item) => {
     return {
       id: item.id,
       is_eligible: item.is_eligible,
@@ -274,6 +286,12 @@ export const idIsEligible = async () => {
       from_claiming: item.from_claiming,
     };
   });
+  const unclaimed = dataArray.filter((item) => item.is_claimed == false);
+  const claimed = dataArray.filter((item) => item.is_claimed == true);
+  const expired = dataArray.filter((item) => item.from_claiming == true);
+  setUnclaimedId(unclaimed);
+  setClaimedId(claimed);
+  setIsExpiredId(expired);
 };
 
 export const claimBounty = async (id) => {
@@ -287,7 +305,7 @@ export const claimBounty = async (id) => {
   const tx = await contractSigned.claimBounty(id);
 
   const response = await provider.getTransactionReceipt(tx.hash);
-  await response.confirmations();
+  await response.confirmations(1);
   //do state update, update collection
   return response;
 };

@@ -8,7 +8,12 @@ export const contractABI = [
     inputs: [
       {
         internalType: "address",
-        name: "_genesis_address",
+        name: "_dev1",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_dev2",
         type: "address",
       },
       {
@@ -326,12 +331,12 @@ export const contractABI = [
   },
   {
     inputs: [],
-    name: "genesis_address",
+    name: "free_mint_allocation",
     outputs: [
       {
-        internalType: "address",
+        internalType: "uint256",
         name: "",
-        type: "address",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -736,6 +741,19 @@ export const contractABI = [
     name: "transferSingle",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unclaimed_bounty",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {

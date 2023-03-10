@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { setEligibleIds, idIsEligible, claimBounty } from "../module";
 import { style } from "./style";
@@ -11,20 +12,13 @@ function Bounty() {
   const [claimedId, setClaimedId] = useState([]);
   const [unclaimedId, setUnclaimedId] = useState([]);
   const [expiredId, setIsExpiredId] = useState([]);
+  const [idClaim, setIdClaim] = useState(null);
+  const [isClaiming, setIsClaiming] = useState(false);
 
   const { itemData, address } = useContext(AppContext);
 
   useEffect(() => {
-    async function getEligibility() {
-      const nn = await idIsEligible();
-      const unclaimed = nn.filter((item) => item.is_claimed == false);
-      const claimed = nn.filter((item) => item.is_claimed == true);
-      const expired = nn.filter((item) => item.from_claiming == true);
-      setClaimedId(claimed);
-      setUnclaimedId(unclaimed);
-      setIsExpiredId(expired);
-    }
-    getEligibility();
+    idIsEligible(setClaimedId, setUnclaimedId, setIsExpiredId, false);
   }, []);
 
   const handleSelectedId = (e) => {
@@ -35,6 +29,20 @@ function Bounty() {
       return;
     }
     setEligibleIds(JSON.parse(selectedId), amount);
+  };
+  const handleClaimBounty = async (id) => {
+    setIdClaim(id);
+    setIsClaiming(true);
+    try {
+      await claimBounty(id);
+      await idIsEligible(setClaimedId, setUnclaimedId, setIsExpiredId, true);
+      toast.success("Bounty claimed sucessfully!");
+      setIsClaiming(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Oops something went wrong");
+      setIsClaiming(false);
+    }
   };
   const renderUnclaimed = () => {
     return unclaimedId.map((item) => {
@@ -80,17 +88,6 @@ function Bounty() {
       );
     });
   };
-  const handleClaimBounty = async (id) => {
-    await claimBounty(id);
-    const nn = await idIsEligible();
-    const unclaimed = nn.filter((item) => item.is_claimed == false);
-    const claimed = nn.filter((item) => item.is_claimed == true);
-    const expired = nn.filter((item) => item.from_claiming == true);
-    //update state here
-    setClaimedId(claimed);
-    setUnclaimedId(unclaimed);
-    setIsExpiredId(expired);
-  };
 
   const renderUserBounty = () => {
     return unclaimedId.map((item) => {
@@ -108,8 +105,9 @@ function Bounty() {
               <button
                 onClick={() => handleClaimBounty(item.id)}
                 className={`${style.btnUniversal} w-full rounded-none`}
+                disabled={idClaim == item.id && isClaiming ? true : false}
               >
-                Claim
+                {idClaim == item.id && isClaiming ? "Claiming..." : "Claim"}
               </button>
             </div>
           );
@@ -120,7 +118,7 @@ function Bounty() {
 
   return (
     <div className="min-h-screen text-white w-full py-5">
-      {/* <div className="pt-10">
+      <div className="pt-10">
         <p>Input id for bounties, format example: [id,id,id,id] .</p>
         <p>
           This action is for testing purpose only. Mainnet just use etherscan
@@ -148,7 +146,7 @@ function Bounty() {
       <p className="mt-5">
         -------This section below will be shown to user (will work on styling
         later)------------
-      </p> */}
+      </p>
       <div className="mt-5 w-10/12 max-w-[1300px] mx-auto my-0">
         <div className="mb-5">
           <NavLink
