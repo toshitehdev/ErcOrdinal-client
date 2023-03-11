@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { setEligibleIds, idIsEligible, claimBounty } from "../module";
 import { style } from "./style";
 import AppContext from "../Context";
+import loading from "../assets/loading.gif";
 
 function Bounty() {
   const [selectedId, setSelectedId] = useState();
@@ -35,7 +36,13 @@ function Bounty() {
     setIsClaiming(true);
     try {
       await claimBounty(id);
-      await idIsEligible(setClaimedId, setUnclaimedId, setIsExpiredId, true);
+      await idIsEligible(
+        setClaimedId,
+        setUnclaimedId,
+        setIsExpiredId,
+        true,
+        id
+      );
       toast.success("Bounty claimed sucessfully!");
       setIsClaiming(false);
     } catch (error) {
@@ -96,7 +103,7 @@ function Bounty() {
           return (
             <div
               key={item.id}
-              className="text-center border border-indigo-500 pt-3"
+              className="text-center border border-indigo-500 pt-3 relative"
             >
               {<p className="text-white text-sm">ID: #{item.id}</p>}
               <p className="text-sm mb-3">
@@ -109,6 +116,9 @@ function Bounty() {
               >
                 {idClaim == item.id && isClaiming ? "Claiming..." : "Claim"}
               </button>
+              {idClaim == item.id && isClaiming && (
+                <img className="w-7 absolute right-2 bottom-1" src={loading} />
+              )}
             </div>
           );
         }

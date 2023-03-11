@@ -265,16 +265,22 @@ export const idIsEligible = async (
   setClaimedId,
   setUnclaimedId,
   setIsExpiredId,
-  fetchFromClaim
+  fetchFromClaim,
+  id
 ) => {
-  // const rr = await contract.idIsEligible(175);
-  // console.log(rr);
+  const url =
+    process.env.NODE_ENV == "development"
+      ? process.env.REACT_APP_LOCAL_FETCH
+      : process.env.REACT_APP_REMOTE_FETCH;
   const fetchId = await fetch(
-    `${
-      fetchFromClaim
-        ? "http://127.0.0.1:5000/claim"
-        : "http://127.0.0.1:5000/logs"
-    }`
+    `${fetchFromClaim ? `${url}claim` : `${url}logs`}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ id }),
+    }
   );
   const resJson = await fetchId.json();
   const dataArray = resJson.map((item) => {
