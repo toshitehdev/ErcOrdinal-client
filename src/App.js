@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { AppProvider } from "./Context";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,6 +8,8 @@ import Collections from "./route/Collections";
 import Mint from "./route/Mint";
 import Ordinal from "./route/Ordinal";
 import Bounty from "./route/Bounty";
+import FreeMint from "./route/FreeMint";
+import EthBounty from "./route/EthBounty";
 
 function App() {
   return (
@@ -16,10 +18,18 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dapp" element={<Dapp />}>
+            <Route index element={<Navigate to="/dapp/collections" />} />
             <Route path="/dapp/collections" element={<Collections />} />
             <Route path="/dapp/mint" element={<Mint />} />
             <Route path="/dapp/ordinal/" element={<Ordinal />} />
-            <Route path="/dapp/bounties/" element={<Bounty />} />
+            <Route path="/dapp/bounties/" element={<Bounty />}>
+              <Route
+                index
+                element={<Navigate to="/dapp/bounties/freemint" />}
+              />
+              <Route path="/dapp/bounties/freemint" element={<FreeMint />} />
+              <Route path="/dapp/bounties/ethbounty" element={<EthBounty />} />
+            </Route>
           </Route>
         </Routes>
       </AppProvider>
