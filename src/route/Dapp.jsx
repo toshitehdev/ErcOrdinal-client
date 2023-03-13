@@ -112,7 +112,7 @@ function Dapp() {
           <NavLink to="/dapp/marketplace" className={style.link}>
             Marketplace <span className="italic text-indigo-400">soon</span>
           </NavLink>
-          <NavLink to="/dapp/learning" className={style.link}>
+          <NavLink to="/dapp/faq" className={style.link}>
             FAQ
           </NavLink>
           <NavLink to="/dapp/learning" className={style.link}>

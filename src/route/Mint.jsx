@@ -58,9 +58,6 @@ function Mint() {
         }
       });
   };
-  // const handleWithdraw = () => {
-  //   withdrawMintSale();
-  // };
 
   return (
     <div className="min-h-screen w-full text-white relative text-center">

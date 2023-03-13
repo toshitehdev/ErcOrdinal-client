@@ -114,28 +114,18 @@ function Home() {
         <div className="flex items-center justify-center">
           <a
             className="mr-5"
-            href="https://app.uniswap.org/#/swap?outputCurrency=0x0000"
+            href="https://t.me/+NQvN3JU7WnBmNmM1"
             target="_blank"
           >
             <img className="w-9" src={telegram} alt="" />
           </a>
-          <a
-            className=""
-            href="https://etherscan.io/address/0x000"
-            target="_blank"
-          >
+          <a className="" href="https://twitter.com/ErcOrdinal" target="_blank">
             <img className="w-9" src={twitter} alt="" />
           </a>
-          <a
-            className="ml-5"
-            href="https://www.dextools.io/app/en/ether/pair-explorer/0x000"
-          >
+          <a className="ml-5" href="https://discord.gg/gkcxuKtU5j">
             <img className="w-8" src={discord} alt="" />
           </a>
-          <a
-            className="ml-5"
-            href="https://www.dextools.io/app/en/ether/pair-explorer/0x000"
-          >
+          <a className="ml-5" href="https://github.com/toshitehdev/ErcOrdinal">
             <img className="w-9" src={github} alt="" />
           </a>
         </div>
