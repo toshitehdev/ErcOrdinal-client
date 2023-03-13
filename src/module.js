@@ -268,6 +268,11 @@ export const idIsEligible = async (
   fetchFromClaim,
   id
 ) => {
+  // const rr = await contract.free_mint_allocation();
+  // const uu = await contract.free_mint_allocation();
+  // const tk = await contract.token_counter();
+
+  // console.log(rr);
   const url =
     process.env.NODE_ENV == "development"
       ? process.env.REACT_APP_LOCAL_FETCH
