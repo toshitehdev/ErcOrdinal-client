@@ -275,7 +275,7 @@ export const idIsEligible = async (
   // console.log(rr);
   const url =
     process.env.NODE_ENV == "development"
-      ? process.env.REACT_APP_LOCAL_FETCH
+      ? process.env.REACT_APP_REMOTE_FETCH
       : process.env.REACT_APP_REMOTE_FETCH;
   const fetchId = await fetch(
     `${fetchFromClaim ? `${url}claim` : `${url}logs`}`,

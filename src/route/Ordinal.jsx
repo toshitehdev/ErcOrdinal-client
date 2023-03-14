@@ -30,7 +30,7 @@ function Ordinal() {
       return attributes.map((item, index) => {
         return (
           <div key={index}>
-            <p className="text-sm leading-7 tracking-wide">
+            <p className="text-xs lg:text-sm leading-7 tracking-wide">
               <span className="text-gray-400 font-bold italic">{`${item.trait_type}`}</span>{" "}
               : {`${item.value}`}
             </p>
@@ -41,10 +41,10 @@ function Ordinal() {
   };
   return (
     <div className="min-h-screen p-16 text-white relative">
-      <div className="w-2/5 bg-[#2d325b] px-5 py-7 pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl">
+      <div className="w-full lg:w-2/5 bg-[#2d325b] px-5 py-4 lg:py-7 pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl">
         <form
           onSubmit={(e) => handleTokenFetch(e)}
-          className="flex justify-end items-center mb-10"
+          className="flex justify-end items-center mb-5 lg:mb-10"
         >
           <div className="relative w-fit ml-3">
             <input
@@ -63,12 +63,12 @@ function Ordinal() {
           </div>
         </form>
         <div className="w-4/5 mx-auto my-0 border-2 border-[#4f5596] rounded-3xl overflow-hidden">
-          <div className="w-64 mx-auto my-0 p-5">
+          <div className="w-40 lg:w-64 mx-auto my-0 p-5">
             <img src={singleImg} />
           </div>
 
-          <div className="bg-[#252849] p-10">
-            <p className="text-sm font-bold text-indigo-400 mb-3">
+          <div className="bg-[#252849] p-5 lg:p-10">
+            <p className="text-xs lg:text-sm font-bold text-indigo-400 mb-3">
               ID: #{ordinalIdView}
             </p>
             {renderAttributes()}

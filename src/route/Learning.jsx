@@ -2,7 +2,7 @@ import React from "react";
 
 function Learning() {
   return (
-    <div className="min-h-screen w-full text-white pt-16 pb-16">
+    <div className="min-h-screen w-full text-white pt-16 pb-16 pl-10">
       <div className="max-w-[900px] mx-auto my-0 mt-10">
         <p className="mb-7 font-bold">Learning Materials:</p>
         <a

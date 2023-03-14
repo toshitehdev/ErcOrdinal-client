@@ -1,6 +1,6 @@
 export const contractAddress =
   process.env.NODE_ENV == "development"
-    ? process.env.REACT_APP_LOCALNODE_ADDRESS
+    ? process.env.REACT_APP_REMOTENODE_ADDRESS
     : process.env.REACT_APP_REMOTENODE_ADDRESS;
 
 export const contractABI = [

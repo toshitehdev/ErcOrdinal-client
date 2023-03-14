@@ -1,14 +1,13 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { style } from "./style";
-import { mint, mintMany, stateUpdate } from "../module";
+import { mintMany, stateUpdate } from "../module";
 import AppContext from "../Context";
 
 import ethmint from "../assets/eth-mint.png";
 
 function Mint() {
   const {
-    address,
     addCollectionAmount,
     addItemData,
     mintPrice,
@@ -17,16 +16,6 @@ function Mint() {
   } = useContext(AppContext);
 
   const [mintAmount, setMintAmount] = useState("");
-  const handleMintSingle = async () => {
-    mint(addMintPrice)
-      .then((id) => {
-        stateUpdate(addCollectionAmount, addItemData, addMintPrice);
-        toast.success(`Succesfully Minted #${id}`);
-      })
-      .catch((error) => {
-        toast.error(error.Error);
-      });
-  };
 
   const handleMintMany = () => {
     if (!mintAmount) {
@@ -61,7 +50,7 @@ function Mint() {
 
   return (
     <div className="min-h-screen w-full text-white relative text-center">
-      <div className="bg-[#2d325b] w-3/5 mx-0 my-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl px-16 py-16">
+      <div className="bg-[#2d325b] w-full lg:w-3/5 mx-0 my-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl px-10 lg:px-16 py-16">
         <h1 className="text-center mb-5 text-sm font-semibold">
           Last Minted: #{lastMintedId}
         </h1>
@@ -75,16 +64,9 @@ function Mint() {
             </span>{" "}
             ETH
           </p>
-
-          {/* <button onClick={handleWithdraw} className={style.btnUniversal}>
-              Withdraw Mint Sale (testonly)
-            </button> */}
         </div>
 
         <div className="text-center">
-          {/* <button className={style.btnPink} onClick={handleMintSingle}>
-              Mint Single ErcOrdinal
-            </button> */}
           <input
             type="number"
             placeholder="Amount"

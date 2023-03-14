@@ -128,7 +128,7 @@ function FreeMint() {
 
   return (
     <>
-      <div className="pt-10 text-xs">
+      {/* <div className="pt-10 text-xs">
         <p>Input id for bounties, format example: [id,id,id,id] .</p>
         <p>
           This action is for testing purpose only. Mainnet just use etherscan
@@ -156,40 +156,40 @@ function FreeMint() {
       <p className="mt-5">
         -------This section below will be shown to user (will work on styling
         later)------------
-      </p>
+      </p> */}
 
-      <div className="grid grid-cols-2 gap-5 mt-10 ">
+      <div className="lg:grid grid-cols-2 gap-5 mt-10 h-full">
         <div>
-          <p className="text-sm mb-2">
+          <p className="text-xs lg:text-sm mb-2">
             Unclaimed : [ prize amount | #claiming id ]
           </p>
-          <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/2 overflow-y-auto">
-            <div className="grid grid-cols-4 gap-5 align-middle">
+          <div className="bg-[#2d325b] p-5 lg:p-10 mb-5 rounded-3xl max-h-[50vh]  overflow-y-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 align-middle">
               {renderUnclaimed()}
             </div>
           </div>
         </div>
 
         <div>
-          <p className="text-sm mb-2">
+          <p className="text-xs lg:text-sm mb-2">
             Claimed : [ prize amount | #claiming id ]
           </p>
-          <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/2 overflow-y-auto">
-            <div className="grid grid-cols-4 gap-5 align-middle">
+          <div className="bg-[#2d325b] p-5 lg:p-10 mb-5 rounded-3xl max-h-[50vh] overflow-y-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 align-middle">
               {renderClaimed()}
             </div>
           </div>
         </div>
       </div>
-      <p className="text-sm mb-2">Expired:</p>
-      <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl max-h-1/3 overflow-y-auto">
-        <div className="grid grid-cols-8 gap-5 align-middle">
+      <p className="text-xs lg:text-sm mb-2">Expired:</p>
+      <div className="bg-[#2d325b] p-5 lg:p-10 mb-5 rounded-3xl max-h-[40vh] overflow-y-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-8 gap-5 align-middle">
           {renderExpired()}
         </div>
       </div>
       <p className="text-sm mb-2">Your Available Bounty:</p>
       <div className="bg-[#2d325b] p-10 mb-5 rounded-3xl">
-        <div className="grid grid-cols-3 gap-5 align-middle">
+        <div className="grid lg:grid-cols-3 gap-5 align-middle">
           {renderUserBounty()}
         </div>
       </div>
