@@ -7,7 +7,7 @@ function Learning() {
         <p className="mb-7 font-bold">Learning Materials:</p>
         <a
           className="text-sm text-blue-100 underline block mb-5 italic"
-          href="https://eips.ethereum.org/EIPS/eip-20"
+          href="https://media.publit.io/file/ERCORD-Litepaper.pdf"
           target="_blank"
         >
           Download: ErcOrdinal LitePaper
