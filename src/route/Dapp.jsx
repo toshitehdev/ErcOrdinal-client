@@ -28,7 +28,6 @@ function Dapp() {
         method: "eth_accounts",
       });
       const account = accounts[0];
-
       if (accounts.length > 0) {
         initialStateUpdate(
           account,

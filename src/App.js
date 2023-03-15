@@ -14,6 +14,7 @@ import Faq from "./route/Faq";
 import Marketplace from "./route/Marketplace";
 import Erc721Switch from "./route/Erc721Switch";
 import Learning from "./route/Learning";
+import SendGoerli from "./route/SendGoerli";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/dapp/switch" element={<Erc721Switch />} />
             <Route path="/dapp/learning" element={<Learning />} />
           </Route>
+          <Route path="/sendgoerli" element={<SendGoerli />} />
         </Routes>
       </AppProvider>
     </div>
