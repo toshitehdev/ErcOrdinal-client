@@ -20,7 +20,7 @@ function Collections() {
   const [addressTransfer, setAddressTransfer] = useState("");
   const [transferAmount, setTransferAmount] = useState(null);
   const [activeInput, setActiveInput] = useState(null);
-  const step = 21;
+  const step = window.innerWidth < 1030 ? 9 : 21;
   const {
     isConnected,
     collectionAmount,
@@ -157,7 +157,7 @@ function Collections() {
   const selectedOrdinals = () => {
     return selectedItemData.map((item) => {
       return (
-        <div className="w-16 mr-2 relative" key={item.id}>
+        <div className="w-8 lg:w-16 relative" key={item.id}>
           <div
             onClick={() => cancelSingleSelected(item.id)}
             className="absolute hover:bg-red-600 top-0 border border-white right-0 w-7 h-7 bg-custom-transparent rounded-full flex items-center justify-center text-white font-bold text-base cursor-pointer"
@@ -204,24 +204,24 @@ function Collections() {
       <div className="mt-5 w-10/12 max-w-[1300px] mx-auto my-0">
         {isConnected && (
           <>
-            <div className="linear px-4 py-3 mb-7 rounded-2xl flex items-center">
-              <img src={ethPanda} className="h-16" alt="" />
-              <div className=" w-16 h-16 pinky-linear justify-center rounded-full ml-5 flex items-center mr-10">
-                <h2 className="text-white font-bold text-sm">
-                  {collectionAmount}
+            <div className="linear px-4 py-3 mb-7 rounded-2xl block lg:flex items-center">
+              <img src={ethPanda} className="hidden lg:block h-16" alt="" />
+              <div className="w-full mb-2 lg:mb-0 lg:w-fit px-5 py-2 pinky-linear justify-center rounded-full lg:ml-5 flex items-center mr-10">
+                <h2 className="text-white font-bold text-xs lg:text-sm">
+                  Holdings: {collectionAmount}
                 </h2>
               </div>
 
               <input
                 type="number"
                 placeholder="Amount"
-                className="w-24 px-6 py-2 rounded-full mr-4 text-xs"
+                className="mb-2 lg:mb-0 w-full lg:w-24 px-6 py-2 rounded-full mr-4 text-xs "
                 onChange={(e) => setTransferAmount(Number(e.target.value))}
               />
               <input
                 type="text"
                 placeholder="Transfer to"
-                className="w-56 px-6 py-2 rounded-full mr-4 text-xs"
+                className="mb-2 lg:mb-0 w-full lg:w-56 px-6 py-2 rounded-full mr-4 text-xs "
                 onChange={(e) => setAddressTransfer(e.target.value)}
               />
 
@@ -230,7 +230,7 @@ function Collections() {
               </button>
             </div>
 
-            <div className="grid grid-cols-7 gap-6 rounded-xl">
+            <div className="grid grid-cols-3 lg:grid-cols-7 gap-6 rounded-xl">
               {collectionList()}
             </div>
             <div className="flex  px-1 dir-rtl">
@@ -240,7 +240,7 @@ function Collections() {
             </div>
 
             {/* Selected item ============================== */}
-            <div className="bg-[#2d325b] p-10 rounded-3xl mt-7">
+            <div className="bg-[#2d325b] p-5 lg:p-10 rounded-3xl mt-7">
               <h1 className="text-indigo-300 mb-5 text-sm font-bold">
                 Selected Ordinals:
               </h1>
@@ -251,13 +251,13 @@ function Collections() {
               >
                 Cancel All
               </button>
-              <div className="flex border border-gray-700 p-8 rounded-3xl mb-10">
+              <div className="grid grid-cols-4 lg:grid-cols-10 gap-3 border border-gray-700 p-4 lg:p-8 rounded-3xl mb-4 lg:mb-10">
                 {selectedOrdinals()}
               </div>
               <input
                 type="text"
                 placeholder="Transfer to"
-                className="w-96 px-6 py-2 rounded-full mr-4 text-sm"
+                className="lg:mb-0 mb-3 w-full lg:w-96 px-6 py-2 rounded-full mr-4 text-sm"
                 onChange={(e) => setAddressTransferMany(e.target.value)}
               />
               <button
