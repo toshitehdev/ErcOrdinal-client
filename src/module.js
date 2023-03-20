@@ -9,9 +9,9 @@ async function fetchIPFS(tokenHoldings) {
   const itemData = [];
   for (let i = 0; i < tokenHoldings.length; i++) {
     promises.push(
-      `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${ethers.toNumber(
+      `https://bafybeia6m44df4ln4iprccfu266gcv2thgsa5niaekykcjyxoho2qdgavm.ipfs.nftstorage.link//${ethers.toNumber(
         tokenHoldings[i]
-      )}`
+      )}.json`
     );
     itemData.push({ id: ethers.toNumber(tokenHoldings[i]) });
   }
@@ -275,7 +275,7 @@ export const idIsEligible = async (
   // console.log(rr);
   const url =
     process.env.NODE_ENV == "development"
-      ? process.env.REACT_APP_REMOTE_FETCH
+      ? process.env.REACT_APP_LOCAL_FETCH
       : process.env.REACT_APP_REMOTE_FETCH;
   const fetchId = await fetch(
     `${fetchFromClaim ? `${url}claim` : `${url}logs`}`,
