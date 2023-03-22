@@ -9,7 +9,7 @@ async function fetchIPFS(tokenHoldings) {
   const itemData = [];
   for (let i = 0; i < tokenHoldings.length; i++) {
     promises.push(
-      `https://bafybeia6m44df4ln4iprccfu266gcv2thgsa5niaekykcjyxoho2qdgavm.ipfs.nftstorage.link//${ethers.toNumber(
+      `https://ipfs.io/ipfs/bafybeibqknpxt2dc2s3o5ulfsvqognymzzaot2xk6hkwonhq3qmyerljfe/${ethers.toNumber(
         tokenHoldings[i]
       )}.json`
     );
@@ -221,7 +221,7 @@ export const getTokenData = async (id) => {
   //read from the chain first
   //return nothing, dont do nothing
   const fetchData = await fetch(
-    `https://ipfs.io/ipfs/QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/${id}`
+    `https://ipfs.io/ipfs/bafybeibqknpxt2dc2s3o5ulfsvqognymzzaot2xk6hkwonhq3qmyerljfe/${id}.json`
   );
   const jsonice = await fetchData.json();
   const str = jsonice.image.slice(7);

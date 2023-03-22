@@ -8,6 +8,7 @@ function Ordinal() {
   const [selectedId, setSelectedId] = useState("");
   const [attributes, setAttributes] = useState([]);
   const [singleImg, setSingleImg] = useState("");
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     //default to 0, or render nothing as default?
     async function fetchData() {
@@ -20,10 +21,17 @@ function Ordinal() {
   }, []);
   const handleTokenFetch = async (e) => {
     e.preventDefault();
-    const data = await getTokenData(selectedId);
-    addOrdinalIdView(selectedId);
-    setAttributes(data.attributes);
-    setSingleImg(data.img);
+    setLoading(true);
+    try {
+      const data = await getTokenData(selectedId);
+      addOrdinalIdView(selectedId);
+      setAttributes(data.attributes);
+      setSingleImg(data.img);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
   const renderAttributes = () => {
     if (attributes.length > 0) {
@@ -44,7 +52,7 @@ function Ordinal() {
       <div className="w-full lg:w-2/5 bg-[#2d325b] px-5 py-4 lg:py-7 pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl">
         <form
           onSubmit={(e) => handleTokenFetch(e)}
-          className="flex justify-end items-center mb-5 lg:mb-10"
+          className="flex justify-end items-center"
         >
           <div className="relative w-fit ml-3">
             <input
@@ -62,7 +70,8 @@ function Ordinal() {
             </button>
           </div>
         </form>
-        <div className="w-4/5 mx-auto my-0 border-2 border-[#4f5596] rounded-3xl overflow-hidden">
+        {loading && <p className="text-right text-sm">loading...</p>}
+        <div className="w-4/5 mx-auto my-0 border-2 border-[#4f5596] rounded-3xl overflow-hidden mt-3">
           <div className="w-40 lg:w-64 mx-auto my-0 p-5">
             <img src={singleImg} />
           </div>
