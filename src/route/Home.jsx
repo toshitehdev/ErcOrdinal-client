@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { style } from "./style";
 import ercordinal from "../assets/ercordinal.png";
-import plcc from "../assets/plcc.svg";
+import bghero from "../assets/bghero.png";
 import uni from "../assets/uni.png";
 import etherscan from "../assets/etherscan.png";
 import dextools from "../assets/dextools.png";
@@ -40,7 +40,7 @@ function Home() {
             </NavLink>
           </div>
           <div className="mt-10 w-11/12 md:w-3/5 mx-auto my-0">
-            <img src={plcc} alt="" />
+            <img src={bghero} alt="" />
           </div>
         </div>
       </div>
