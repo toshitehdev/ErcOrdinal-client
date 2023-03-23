@@ -86,7 +86,51 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-[#2e325c] p-10 text-white">
+      <div className="bg-[#2e325c] p-10 md:py-36">
+        <div className="max-w-[800px] mx-auto my-0">
+          <h1 className="text-[#9f7fed] font-bold mb-5">Tokenomic</h1>
+          <div className="text-sm text-white">
+            <p className="leading-6">
+              ErcOrdinal is ERC20 token, but at the same time have unique
+              attributes like ERC721. This makes Ercordinal can be traded on
+              dex, and can be minted like regular NFTs. Acquiring ErcOrdinal can
+              be done either via buying from Uniswap or directly mint it in the
+              DAPP.
+            </p>
+            <p className="mt-3 leading-6">
+              With such a unique utility, ErcOrdinal comes with unique tokenomic
+              as well. 100 ERCORD provided as liquidity on Uniswap pool, and the
+              rest of it is available for minting. When price on Uniswap is
+              higher than minting price, this can be an opportunity to mint
+              ERCORD and sell for profit on Uniswap.
+            </p>
+            <p className="mt-3 leading-6">
+              What if Uniswap price is way lower than minting price? in that
+              case, we have allocated some of ETH from minting sale for buyback.
+              Where will the token from buyback go? We won't burn it, we have
+              better plan, which is to list the token on NFT marketplace like
+              opensea. Sale from opensea will directly be used for more buyback
+              and bounties for community.
+            </p>
+            <p className="mt-3 leading-6">Breakdown of the tokenomic:</p>
+            <ul className="list-disc">
+              <li>Max Supply: 100,000</li>
+              <li>Dev Token: 11</li>
+              <li>Uniswap Initial Liquidity: 100</li>
+              <li>Minting: 99,889</li>
+              <span className="mt-3 block">Minting Sale Allocation:</span>
+              <ul className="list-disc">
+                <li>Dev: 40%</li>
+                <li>Buyback: 30%</li>
+                <li>Marketing: 15%</li>
+                <li>Bounty: 10%</li>
+                <li>Further Development: 5%</li>
+              </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#202543] p-10 text-white">
         <h2 className="text-center font-bold mb-5">Contract</h2>
         <div className="flex items-center justify-center">
           <a
@@ -130,6 +174,7 @@ function Home() {
           </a>
         </div>
       </div>
+
       <div className="p-5 bg-[#5046e5]">
         <p className="text-white text-center">ercordinal&copy;2023</p>
       </div>
