@@ -91,21 +91,21 @@ function Home() {
         <div className="flex items-center justify-center">
           <a
             className="mr-5"
-            href="https://app.uniswap.org/#/swap?outputCurrency=0x0000"
+            href="https://app.uniswap.org/#/swap?outputCurrency=0xc85f1a1baaee1e4e892edf78e4c0a7a376459bdc"
             target="_blank"
           >
             <img className="w-9" src={uni} alt="" />
           </a>
           <a
             className=""
-            href="https://etherscan.io/address/0x000"
+            href="https://etherscan.io/address/0xC85f1A1BAaEe1E4E892EdF78e4c0A7a376459bDC"
             target="_blank"
           >
             <img className="w-9" src={etherscan} alt="" />
           </a>
           <a
             className="ml-5"
-            href="https://www.dextools.io/app/en/ether/pair-explorer/0x000"
+            href="https://www.dextools.io/app/en/ether/pair-explorer/0x4a2fcfa13f15acff07d0236d0b5b201724e105a4"
           >
             <img className="w-8" src={dextools} alt="" />
           </a>

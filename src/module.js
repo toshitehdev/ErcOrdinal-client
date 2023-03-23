@@ -99,6 +99,7 @@ export const stateUpdate = async (
       addMintPrice(mint_price);
       addCollectionAmount(tokenHoldings.length);
       addItemData(itemData);
+      return true;
     }
   } catch (error) {
     console.log(error);
@@ -147,8 +148,9 @@ export const mintMany = async (amount, addMintPrice, cb) => {
     const tx = await contractSigned.mintMany(amount, {
       value: ethers.parseEther(`${p}`),
     });
-    const response = await provider.getTransactionReceipt(tx.hash);
-    await response.confirmations();
+    await tx.wait();
+    const response = await provider.waitForTransaction(tx.hash);
+    // await response.confirmations();
     // console.log(response.logs);
     const mintedIds = [];
     for (let i = 0; i < response.logs.length; i++) {
@@ -168,7 +170,7 @@ export const mintMany = async (amount, addMintPrice, cb) => {
     addMintPrice(mint_price);
     return mintedIds;
   } catch (error) {
-    // console.log(error);s
+    console.log(error);
     throw error;
   }
 };

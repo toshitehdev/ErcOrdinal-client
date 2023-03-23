@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { style } from "./style";
-import { mintMany, stateUpdate } from "../module";
+import { mintMany, stateUpdate, withdrawMintSale } from "../module";
 import AppContext from "../Context";
 
 import ethmint from "../assets/eth-mint.png";
+import loading from "../assets/loading.gif";
 
 function Mint() {
   const {
@@ -16,6 +17,7 @@ function Mint() {
   } = useContext(AppContext);
 
   const [mintAmount, setMintAmount] = useState("");
+  const [isMinting, setIsMinting] = useState(false);
 
   const handleMintMany = () => {
     if (!mintAmount) {
@@ -27,23 +29,28 @@ function Mint() {
     if (mintAmount < 1) {
       return;
     }
+    setIsMinting(true);
     mintMany(mintAmount, addMintPrice, () => {
       toast.success("You Just Won The Bounty", {
         icon: "🚀",
       });
     })
-      .then((ids) => {
+      .then(async (ids) => {
         stateUpdate(addCollectionAmount, addItemData, addMintPrice);
         setMintAmount("");
         toast.success(`Succesfully Minted #${ids}`);
+        setIsMinting(false);
       })
       .catch((error) => {
+        console.log(error);
         if (error.code == "ACTION_REJECTED") {
           toast.warning("You rejected the action");
+          setIsMinting(false);
         } else {
           const paramIndexString = error.message.indexOf("(") - 1;
           const errorMessage = error.message.slice(0, paramIndexString);
           toast.error(errorMessage);
+          setIsMinting(false);
         }
       });
   };
@@ -74,8 +81,12 @@ function Mint() {
             onChange={(e) => setMintAmount(e.target.value)}
             value={mintAmount}
           />
-          <button className={style.btnUniversal} onClick={handleMintMany}>
-            Mint ErcOrdinals
+          <button
+            disabled={isMinting ? true : false}
+            className={style.btnUniversal}
+            onClick={handleMintMany}
+          >
+            {isMinting ? "Minting..." : "Mint ErcOrdinal"}
           </button>
 
           <p className="text-sm mt-7">

@@ -8,7 +8,7 @@ function Ordinal() {
   const [selectedId, setSelectedId] = useState("");
   const [attributes, setAttributes] = useState([]);
   const [singleImg, setSingleImg] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     //default to 0, or render nothing as default?
     async function fetchData() {
