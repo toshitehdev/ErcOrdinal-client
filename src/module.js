@@ -1,8 +1,10 @@
 import { ethers } from "ethers";
-import { contractAddress, contractABI } from "./constant";
+import { contractAddress, contractABI, contractNftABI } from "./constant";
 
 const provider = new ethers.BrowserProvider(window.ethereum);
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
+const nftAddress = "0x418774565D30Bc12862A08A5157f8d7E023D72be";
+const contractNft = new ethers.Contract(nftAddress, contractNftABI, provider);
 
 async function fetchIPFS(tokenHoldings) {
   let promises = [];
@@ -321,4 +323,18 @@ export const claimBounty = async (id) => {
   await response.confirmations(1);
   //do state update, update collection
   return response;
+};
+
+export const switchToErc721 = async (id) => {
+  const signer = await provider.getSigner();
+  const contractNftSigned = new ethers.Contract(
+    nftAddress,
+    contractNftABI,
+    signer
+  );
+
+  const tx = await contractNftSigned.switchToErc721(id);
+  await tx.wait();
+  const response = await provider.waitForTransaction(tx.hash);
+  console.log(response);
 };
