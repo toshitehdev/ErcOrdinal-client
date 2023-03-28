@@ -336,5 +336,21 @@ export const switchToErc721 = async (id) => {
   const tx = await contractNftSigned.switchToErc721(id);
   await tx.wait();
   const response = await provider.waitForTransaction(tx.hash);
-  console.log(response);
+  // console.log(response);
+  return response;
+};
+
+export const switchToErcord = async (id) => {
+  const signer = await provider.getSigner();
+  const contractNftSigned = new ethers.Contract(
+    nftAddress,
+    contractNftABI,
+    signer
+  );
+
+  const tx = await contractNftSigned.switchToErcord(id);
+  await tx.wait();
+  const response = await provider.waitForTransaction(tx.hash);
+  // console.log(response);
+  return response;
 };
