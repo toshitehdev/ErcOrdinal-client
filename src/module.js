@@ -3,7 +3,7 @@ import { contractAddress, contractABI, contractNftABI } from "./constant";
 
 const provider = new ethers.BrowserProvider(window.ethereum);
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
-const nftAddress = "0xDf9691D5744d82f7956D4BFBe73C96967eD3863f";
+const nftAddress = "0x6c107b1f1e222d02fd0b7a2f78fe5c1b42b9c733";
 const contractNft = new ethers.Contract(nftAddress, contractNftABI, provider);
 
 async function fetchIPFS(tokenHoldings) {
@@ -349,6 +349,21 @@ export const switchToErcord = async (id) => {
   );
 
   const tx = await contractNftSigned.switchToErcord(id);
+  await tx.wait();
+  const response = await provider.waitForTransaction(tx.hash);
+  // console.log(response);
+  return response;
+};
+
+export const claimFromERC721 = async (id) => {
+  const signer = await provider.getSigner();
+  const contractNftSigned = new ethers.Contract(
+    nftAddress,
+    contractNftABI,
+    signer
+  );
+
+  const tx = await contractNftSigned.claimFreeMint(id);
   await tx.wait();
   const response = await provider.waitForTransaction(tx.hash);
   // console.log(response);

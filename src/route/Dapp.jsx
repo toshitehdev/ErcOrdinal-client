@@ -135,7 +135,7 @@ function Dapp() {
             to="/dapp/switch"
             className={style.link}
           >
-            ERC721 switch <span className="italic text-indigo-400">soon</span>
+            ERC721 switch
           </NavLink>
           <NavLink
             onClick={() => setMenuShown(!menuShown)}

@@ -24,9 +24,11 @@ function Home() {
         <div className="md:flex items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5  max-w-[1200px]">
           <div className="text-[#feffff]">
             <h2 className="font-bold text=[##93a2c7]">
-              Trade on DEX? List on Marketplace?
+              NFT that you can trade on DEX!
             </h2>
-            <h2 className="text-lg font-bold text-[#527bdc]">Why not Both?</h2>
+            <h2 className="text-lg font-bold text-[#527bdc]">
+              NFT that will never goes to 0 in value!
+            </h2>
             <p className="text-white text-sm mt-2 mb-5">
               ErcOrdinal is token with both ERC20 interface and ERC721
               attributes.
@@ -34,9 +36,16 @@ function Home() {
             <NavLink
               to="/dapp"
               target="_blank"
-              className={`${style.btnUniversal}`}
+              className={`${style.btnUniversal} mr-5`}
             >
               Enter Dapp
+            </NavLink>
+            <NavLink
+              to="/dapp/mint"
+              target="_blank"
+              className={`${style.btnUniversal}`}
+            >
+              Mint Now
             </NavLink>
           </div>
           <div className="mt-10 w-11/12 md:w-3/5 mx-auto my-0">
